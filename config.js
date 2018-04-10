@@ -97,7 +97,6 @@ module.exports = {
     return minify(html, {
       collapseWhitespace: true,
       conservativeCollapse: true
-
     })
   },
   processRamlObj (ramlObj, config, options) {
