@@ -1,18 +1,39 @@
 {
-  "name": "raml2html-default-theme",
-  "description": "The default theme for raml2html",
-  "version": "2.7.1",
+  "name": "raml2html-werk-theme",
+  "description": "a bulma and open-color based single-page theme that is easily searchable and offline-ready",
+  "version": "0.9.0",
+  "main": "config.js",
   "author": {
-    "name": "Kevin Renskers",
-    "email": "kevin@mixedcase.nl"
+    "name": "Konrad Mohrfeldt",
+    "email": "mohrfeldt@silicann.com"
   },
   "bugs": {
-    "url": "https://github.com/raml2html/default-theme/issues"
+    "url": "https://github.com/silicann/raml2html-werk-theme/issues"
   },
   "devDependencies": {
-    "glob": "7.1.x"
+    "autoprefixer": "^8.2.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.2",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "css-loader": "^0.28.11",
+    "cssnano": "^3.10.0",
+    "file-loader": "^1.1.11",
+    "glob": "7.1.x",
+    "html-minifier": "^3.5.14",
+    "less": "^3.0.1",
+    "less-loader": "^4.1.0",
+    "mini-css-extract-plugin": "^0.4.0",
+    "node-fontdump": "^1.2.1",
+    "postcss-loader": "^2.1.3",
+    "raml2html": "^7.0.0",
+    "standard": "^11.0.1",
+    "webpack": "^4.5.0",
+    "webpack-cli": "^2.0.14"
   },
-  "homepage": "https://github.com/raml2html/default-theme",
+  "homepage": "https://github.com/silicann/raml2html-werk-theme",
   "keywords": [
     "RAML",
     "raml2html-theme"
@@ -20,16 +41,35 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/raml2html/default-theme.git"
+    "url": "git://github.com/silicann/raml2html-werk-theme.git"
   },
-  "preferGlobal": true,
-  "files": [
-    "index.nunjucks",
-    "resource.nunjucks",
-    "item.nunjucks",
-    "examples.nunjucks"
-  ],
   "engines": {
     "node": ">=4"
+  },
+  "dependencies": {
+    "bulma": "^0.6.2",
+    "delegate": "^3.2.0",
+    "details-element-polyfill": "^2.0.1",
+    "fs-extra": "^5.0.0",
+    "highlight.js": "^9.12.0",
+    "luett": "^2.6.0",
+    "markdown-it": "^8.4.1",
+    "markdown-it-deflist": "^2.0.3",
+    "markdown-it-sanitizer": "^0.4.3",
+    "open-color": "^1.6.3",
+    "stroll.js": "^3.0.2"
+  },
+  "scripts": {
+    "prepublishOnly": "npm run test && npm run build",
+    "test": "npm run lint",
+    "lint": "standard config.js postcss.config.js webpack.config.js assets/*.js assets/**/*.js examples/*.js",
+    "build": "npm run dump_fonts && npm run bundle",
+    "bundle": "NODE_ENV=production webpack",
+    "dump_fonts": "npm run dump_fonts_fira_sans && npm run dump_fonts_fira_code",
+    "dump_fonts_fira_sans": "test -f .cache/fira-sans/fonts.css || (mkdir -p .cache/fira-sans && fontdump -t .cache/fira-sans -w . https://fonts.googleapis.com/css?family=Fira+Sans:300,400,500,700)",
+    "dump_fonts_fira_code": "test -f .cache/fira-code/fira_code.css || (wget -q https://github.com/tonsky/FiraCode/releases/download/1.205/FiraCode_1.205.zip -O .cache/fira-code.zip && unzip -q -u -d .cache/fira-code .cache/fira-code.zip)"
+  },
+  "standard": {
+    "parser": "babel-eslint"
   }
 }

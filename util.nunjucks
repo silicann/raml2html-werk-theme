@@ -1,0 +1,253 @@
+{% macro render_markdown(content, headingBaseLevel=1) %}
+  {% if content %}
+    <div class="content">
+      {{ markdown(content, headingBaseLevel=headingBaseLevel) }}
+    </div>
+  {% endif %}
+{% endmacro %}
+
+
+
+{% macro method_verb(method) %}
+  <strong class="method is-{{ method.method | lower }}">{{ method.method | upper }}</strong>
+{% endmacro %}
+
+
+
+{% macro anchor(id) %}
+  <a class="anchor" href="#{{ id }}">¶</a>
+{% endmacro %}
+
+
+
+{%- macro type_name(prop) -%}
+  {%- if prop.rawType and prop.rawType.name in raml.types -%}
+    {{ type_reference_link(raml.types[prop.rawType.name]) }}
+  {%- elif prop.items and prop.items.originalType in raml.types -%}
+    {{ type_reference_link(raml.types[prop.originalType]) }}
+  {%- elif is('string', prop) -%}
+    {{ prop }}
+  {%- else -%}
+    {{ prop.originalType | default(prop.type, true) }}
+  {%- endif -%}
+{%- endmacro -%}
+
+
+
+{%- macro type_reference_link(type) -%}
+  <a href="#{{ type.uniqueId }}" title="Jump to '{{ type.displayName | default(type.name, true) }}' type docs"
+     data-component="preview">
+    {%- if type.displayName and type.displayName != type.name -%}
+      <abbr title="{{ type.displayName }}">{{ type.name }}</abbr>
+    {%- else -%}
+      {{ type.name }}
+    {%- endif -%}
+  </a>
+  {#- for all non-object base-types show the base-type with a leading space -#}
+  {%- if type.type !== 'object' -%}
+    {{ ' ' }}({{ type.type }})
+  {%- endif -%}
+{%- endmacro -%}
+
+
+
+{% macro type_info(prop, standalone=false) %}
+  {% if prop.type !== nil %}
+    {% if not prop.structuredValue %}
+      <div class="typedef-type">
+        {%- if prop.enum -%}
+          {{ type_name(prop) }},
+          one of [
+          {%- for value in prop.enum -%}
+            <code>{{ value }}</code>
+            {%- if not loop.last -%},&nbsp;{%- endif -%}
+          {%- endfor -%}
+          ]
+        {%- else -%}
+          {%- if prop.type === 'array' and prop.items -%}
+            Array of {{ type_name(prop.items) | trim }}
+          {%- elif prop.type === 'union' and prop.anyOf.length -%}
+            Union of
+            {% for alt in prop.anyOf -%}
+              {{ type_name(alt) | trim }}
+              {%- if not loop.last %} or {% endif -%}
+            {%- endfor -%}
+          {%- else -%}
+            {{ type_name(prop) | trim }}
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if prop.default or prop.default == 0 or prop.default == false %}
+          , default: <code>{{ prop.default }}</code>
+        {%- endif -%}
+        {%- if prop.repeat %}, repeat: {{ prop.repeat }}{%- endif -%}
+        {%- if prop.type == 'string' -%}
+          {%- if prop.minLength or prop.minLength == 0 %}, minimum length: {{ prop.minLength }}{%- endif -%}
+          {%- if prop.maxLength or prop.maxLength == 0 %},  maximum length: {{ prop.maxLength }}{%- endif -%}
+        {%- else -%}
+          {%- if prop.minItems or prop.minItems == 0 %}, minimum items: {{ prop.minItems }}{%- endif -%}
+          {%- if prop.maxItems or prop.maxItems == 0 %}, maxmium items: {{ prop.maxItems }}{%- endif -%}
+          {%- if prop.minimum or prop.minimum == 0 %}, minimum: {{ prop.minimum }}{%- endif -%}
+          {%- if prop.maximum or prop.maximum == 0 %}, maximum: {{ prop.maximum }}{%- endif -%}
+        {%- endif -%}
+        {%- if prop.pattern %}, pattern: <code class="value">{{ prop.pattern }}</code>{%- endif -%}
+        {%- if not standalone -%}
+          {%- if prop.required -%}
+            , <strong class="typedef-required">required</strong>
+          {%- else -%}
+            , optional
+          {%- endif -%}
+        {%- endif -%}
+        {%- if prop.annotations and prop.annotations.length > 0 -%}
+          {#- render type-less annotations as custom property flags -#}
+          {%- for annotation in prop.annotations -%}
+            {%- set a = raml.annotationTypes[annotation.key] -%}
+            {%- if a.type === 'nil' -%}
+              , {{ a.displayName | default(a.name, true) }}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    {% endif %}
+  {% endif %}
+{% endmacro %}
+
+
+
+{% macro body_section(base_id, bodies) %}
+  {% if isIterable(bodies) %}
+    {% set tabs_id = method_id + '_body' %}
+    <div class="tabbable" data-component="tabbable" data-tabbable-id="{{ tabs_id }}">
+      <header class="tabs is-boxed">
+        <strong class="title is-6">Body</strong>
+        <ul class="tabbable-tabs" data-tabbable-tabs="{{ tabs_id }}">
+          {% for body in bodies %}
+            {% set tab_id = base_id + '_body_' + loop.index0 %}
+            <li>
+              <a id="{{ tab_id }}" href="#{{ tab_id }}" data-tab="{{ loop.index0 }}">
+                {{ body.key | default(body.name, true) }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </header>
+      <div class="tabbable-contents" data-tabbable-contents="{{ tabs_id }}">
+        {% for body in bodies %}
+          <div data-tab-content="{{ loop.index0 }}">
+            {% if body.key == body.displayName or not body.displayName %}
+              {% set title = 'Properties' %}
+            {% else %}
+              {% set title = body %}
+            {% endif %}
+            {{ property_section(body, body.properties) }}
+            {{ example_section(null, body.examples) }}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+
+
+{% macro example_section(name, examples, h=6, hDisplay=6) %}
+  {% if isIterable(examples) %}
+    {% if name !== false %}
+      <h{{ h }} class="title is-{{ hDisplay }}">{{ name | default('Examples') }}</h{{ h }}>
+    {% endif %}
+    <ul>
+      {% for example in examples %}
+        <li>
+          <details>
+            <summary>{{ example.displayName | default(example.name) | default('Example', true) }}</summary>
+            <pre><code>{{ example.value }}</code></pre>
+          </details>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}
+
+
+
+{% macro property_section(name, list, h=6, hDisplay=6) %}
+  {% if isIterable(list) %}
+    {% if name and is('string', name) %}
+      <h{{ h }} class="title is-{{ hDisplay }}">{{ name }}</h{{ h }}>
+    {% elif name and is('object', name) %}
+      <h{{ h }} class="title is-{{ hDisplay }}">Properties ({{ type_name(name) | trim }})</h{{ h }}>
+    {% endif %}
+
+    {{ property_table(list) }}
+  {% endif %}
+{% endmacro %}
+
+
+
+{% macro property_table(props) %}
+  {% if isIterable(props) %}
+    <table class="table is-property-list">
+      <tbody>
+        {% for prop in props %}
+          <tr>
+            <th scope="row">
+              {{ prop.key | default(prop.name, true) }}
+              {{ type_info(prop) }}
+            </th>
+            <td>
+              {{ render_markdown(prop.description, headingBaseLevel=6) }}
+              {% if prop.properties %}
+                <details>
+                  <summary>{{ prop.name }}</summary>
+                  {{ property_table(prop.properties) }}
+                </details>
+              {% endif %}
+              {% if prop.items and prop.items.properties %}
+                <details>
+                  <summary>
+                    {%- if prop.items.originalType -%}
+                      {{ prop.items.originalType }}
+                    {%- elif prop.items.name and prop.items.name !== 'items' -%}
+                      {{ prop.items.name }}
+                    {%- else -%}
+                      {{ prop.items.type }}
+                    {%- endif -%}
+                    []
+                  </summary>
+                  {{ property_table(prop.items.properties) }}
+                </details>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endmacro %}
+
+
+{% macro annotation_section (annotations, h=6, hDisplay=6) %}
+  {% if isIterable(annotations) %}
+    {% for annotation in annotations %}
+        {% if annotation.key in raml.annotationTypes %}
+          {% set annotationType = raml.annotationTypes[annotation.key] %}
+
+          <h{{ h }} class="title is-{{ hDisplay }}">
+            {{ annotationType.displayName | default(annotationType.name) }}
+          </h{{ h }}>
+
+          {% if annotationType.type === 'array' and annotationType.items === 'string' %}
+            <div class="content">
+              <ul>
+                {% for item in annotation.structuredValue %}
+                  <li>
+                    <code class="value">{{ item }}</code>
+                  </li>
+                {% endfor %}
+              <ul>
+            </div>
+          {% endif %}
+        {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endmacro %}

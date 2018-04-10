@@ -1,1096 +1,1982 @@
-<!DOCTYPE HTML>
+<!doctype HTML>
 <html>
   <head>
-    <title>World Music API API documentation</title>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>World Music API API documentation</title>
     <meta name="generator" content="https://github.com/raml2html/raml2html 7.0.0">
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css">
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $('.page-header pre code, .top-resource-description pre code, .modal-body pre code').each(function(i, block) {
-          hljs.highlightBlock(block);
-        });
-        $('[data-toggle]').click(function() {
-          var selector = $(this).data('target') + ' pre code';
-          $(selector).each(function(i, block) {
-            hljs.highlightBlock(block);
-          });
-        });
-        // open modal on hashes like #_action_get
-        $(window).bind('hashchange', function(e) {
-          var anchor_id = document.location.hash.substr(1); //strip #
-          var element = $('#' + anchor_id);
-          // do we have such element + is it a modal?  --> show it
-          if (element.length && element.hasClass('modal')) {
-            element.modal('show');
-          }
-        });
-        // execute hashchange on first page load
-        $(window).trigger('hashchange');
-        // remove url fragment on modal hide
-        $('.modal').on('hidden.bs.modal', function() {
-          try {
-            if (history && history.replaceState) {
-              history.replaceState({}, '', '#');
-            }
-          } catch (e) {}
-        });
-      });
-    </script>
-    <style>
-      .hljs {
-        background: transparent;
-      }
-      .parent {
-        color: #999;
-      }
-      .list-group-item>.badge {
-        float: none;
-        margin-right: 6px;
-      }
-      .panel-title>.methods {
-        float: right;
-      }
-      .badge {
-        border-radius: 0;
-        text-transform: uppercase;
-        width: 70px;
-        font-weight: normal;
-        color: #f3f3f6;
-        line-height: normal;
-      }
-      .badge_get {
-        background-color: #63a8e2;
-      }
-      .badge_post {
-        background-color: #6cbd7d;
-      }
-      .badge_put {
-        background-color: #22bac4;
-      }
-      .badge_delete {
-        background-color: #d26460;
-      }
-      .badge_patch {
-        background-color: #ccc444;
-      }
-      .list-group,
-      .panel-group {
-        margin-bottom: 0;
-      }
-      .panel-group .panel+.panel-white {
-        margin-top: 0;
-      }
-      .panel-group .panel-white {
-        border-bottom: 1px solid #F5F5F5;
-        border-radius: 0;
-      }
-      .panel-white:last-child {
-        border-bottom-color: white;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-      }
-      .panel-white .panel-heading {
-        background: white;
-      }
-      .tab-pane ul {
-        padding-left: 2em;
-      }
-      .tab-pane h1 {
-        font-size: 1.3em;
-      }
-      .tab-pane h2 {
-        font-size: 1.2em;
-        padding-bottom: 4px;
-        border-bottom: 1px solid #ddd;
-      }
-      .tab-pane h3 {
-        font-size: 1.1em;
-      }
-      .tab-content {
-        border-left: 1px solid #ddd;
-        border-right: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
-        padding: 10px;
-      }
-      #sidebar {
-        margin-top: 30px;
-        padding-right: 5px;
-        overflow: auto;
-        height: 90%;
-      }
-      .top-resource-description {
-        border-bottom: 1px solid #ddd;
-        background: #fcfcfc;
-        padding: 15px 15px 0 15px;
-        margin: -15px -15px 10px -15px;
-      }
-      .resource-description {
-        border-bottom: 1px solid #fcfcfc;
-        background: #fcfcfc;
-        padding: 15px 15px 0 15px;
-        margin: -15px -15px 10px -15px;
-      }
-      .resource-description p:last-child {
-        margin: 0;
-      }
-      .list-group .badge {
-        float: left;
-      }
-      .method_description {
-        margin-left: 85px;
-      }
-      .method_description p:last-child {
-        margin: 0;
-      }
-      .list-group-item {
-        cursor: pointer;
-      }
-      .list-group-item:hover {
-        background-color: #f5f5f5;
-      }
-      pre code {
-        overflow: auto;
-        word-wrap: normal;
-        white-space: pre;
-      }
-      .items {
-        background: #f5f5f5;
-        color: #333;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 9.5px;
-        margin: 0 0 10px;
-        font-size: 13px;
-        line-height: 1.42857143;
-      }
-      .examples {
-        margin-left: 0.5em;
-      }
-      .resource-modal li>ul {
-        margin-bottom: 1em;
-      }
-    </style>
+    <link rel="stylesheet" href="./assets/docs.css">
   </head>
-  <body data-spy="scroll" data-target="#sidebar">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-9" role="main">
-          <div class="page-header">
-            <h1>World Music API API documentation
-              <small>version v1</small>
-            </h1>
-            <p>http://{environment}.musicapi.com/{version}</p>
-            <p>This is an example of a music API.</p>
+
+  <body data-component="scroll-spy">
+    <header class="hero">
+      <div class="hero-body">
+        <h1 class="title is-1">World Music API</h1>
+        
+          <p class="subtitle has-priority-3">This is an example of a music API.</p>
+        
+      </div>
+    </header>
+
+    <div>
+      <div class="columns">
+        <div class="column is-nav is-narrow-tablet is-12-mobile" data-component="menu">
+          <aside class="sidebar">
+  <nav class="menu section">
+    <p class="menu-label">Info</p>
+    <ul class="menu-list">
+      <li>
+        <a href="#__basic_information_docs">
+          Basic Information
+        </a>
+      </li>
+      
+        <li>
+          <a href="#getting_started">
+            Getting Started
+          </a>
+        </li>
+      
+        <li>
+          <a href="#legal">
+            Legal
+          </a>
+        </li>
+      
+    </ul>
+
+    <p class="menu-label">Resources</p>
+    <ul class="menu-list">
+      
+        <li>
+          <a href="#api">
+            /api
+          </a>
+
+          
+        </li>
+      
+        <li>
+          <a href="#entry">
+            /entry
+          </a>
+
+          
+        </li>
+      
+        <li>
+          <a href="#songs">
+            Songs
+          </a>
+
+          
             <ul>
               <li>
-                <strong>environment</strong>:
-                <em>required (one of stg, dev, test, prod)
-      </em>
+                <a href="#songs">
+                  /songs
+                </a>
               </li>
-              <li>
-                <strong>version</strong>:
-                <em>required (v1)
-      </em>
-              </li>
+              
+                <li>
+                  
+                  <a href="#songs__songid_">
+                    /songs/{songId}
+                  </a>
+                </li>
+              
             </ul>
-            <h3 id="getting_started">
-              <a href="#getting_started">Getting Started</a>
-            </h3>
-            <p>This is a getting started guide for the World Music API.</p>
-            <h3 id="legal">
-              <a href="#legal">Legal</a>
-            </h3>
-            <p>See
-              <a href="http://legal.musicapi.com">http://legal.musicapi.com</a>
-            </p>
+          
+        </li>
+      
+    </ul>
+    
+      <p class="menu-label">Types</p>
+      <ul class="menu-list">
+        
+          <li>
+            <a href="#type__AnotherEntry">
+              AnotherEntry
+            </a>
+          </li>
+        
+          <li>
+            <a href="#type__ApiLib.Cat">
+              Cat
+            </a>
+          </li>
+        
+          <li>
+            <a href="#type__ApiLib.CustomDate">
+              CustomDate
+            </a>
+          </li>
+        
+          <li>
+            <a href="#type__ApiLib.Dog">
+              Dog
+            </a>
+          </li>
+        
+          <li>
+            <a href="#type__ApiLib.RamlDataType">
+              RamlDataType
+            </a>
+          </li>
+        
+          <li>
+            <a href="#type__Entry">
+              Entry
+            </a>
+          </li>
+        
+          <li>
+            <a href="#type__SongsLib.Song">
+              Song
+            </a>
+          </li>
+        
+          <li>
+            <a href="#type__User">
+              User
+            </a>
+          </li>
+        
+      </ul>
+    
+  </nav>
+</aside>
+
+        </div>
+        <div class="column">
+          <main class="main-content">
+            
+            
+
+            <section id="__all_docs" class="section" data-spy>
+              <section id="__basic_information_docs" class="subsection" data-spy data-spy-parent="__all_docs">
+                <h2 class="title is-2">Basic Information</h2>
+                <h3 class="title is-3">Endpoint</h3>
+                <pre><code class="value" data-hljs="disabled">http://{environment}.musicapi.com/{version}</code></pre>
+
+                
+  
+    
+
+    
+  
+    <table class="table is-property-list">
+      <tbody>
+        
+          <tr>
+            <th scope="row">
+              environment
+              
+  
+    
+      <div class="typedef-type">string,
+          one of [<code>stg</code>,&nbsp;<code>dev</code>,&nbsp;<code>test</code>,&nbsp;<code>prod</code>], <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              version
+              
+  
+    
+      <div class="typedef-type">string,
+          one of [<code>v1</code>], <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+  
+
+              </section>
+
+              
+                <section id="getting_started" class="subsection" data-spy data-spy-parent="__all_docs">
+                  <h2 class="title is-2">Getting Started</h2>
+                  
+  
+    <div class="content">
+      <p>This is a getting started guide for the World Music API.</p>
+
+    </div>
+  
+
+                </section>
+              
+                <section id="legal" class="subsection" data-spy data-spy-parent="__all_docs">
+                  <h2 class="title is-2">Legal</h2>
+                  
+  
+    <div class="content">
+      <p>See http://legal.musicapi.com</p>
+
+    </div>
+  
+
+                </section>
+              
+            </section>
+
+            <section id="__all_resources" class="section" data-spy>
+              <h2 class="title is-2">Resources</h2>
+              
+                
+  <div id="api" class="group" data-spy data-spy-parent="__all_resources">
+    <header class="group-header">
+      <div class="group-title">
+        <h3 class="title is-3">/api</h3>
+      </div>
+      
+  
+
+    </header>
+
+    
+  
+
+  <!-- list of methods for /api -->
+  
+
+  
+    <!-- begin of resource block for GET /api -->
+    
+
+    <div id="api_get" class="group-endpoint" data-spy data-spy-parent="api">
+      <header>
+        <h4 class="title is-4 is-anchored">
+          /api 
+  <a class="anchor" href="#api_get">¶</a>
+
+          <div class="subtitle is-6">
+            
+  <strong class="method is-get">GET</strong>
+ <span class="value">/api</span>
           </div>
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 id="api" class="panel-title">/api</h3>
-            </div>
-            <div class="panel-body">
-              <div class="panel-group">
-                <div class="panel panel-white resource-modal">
-                  <div class="panel-heading">
-                    <h4 class="panel-title">
-                      <a class="collapsed" data-toggle="collapse" href="#panel_api">
-                        <span class="parent"></span>/api
-                      </a>
-                      <span class="methods">
-            <a href="#api_get">
-<!-- modal shown by hashchange event -->
-              <span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                      </a>
-                      <a href="#api_post">
+        </h4>
 
-                        <!-- modal shown by hashchange event -->
-                        <span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                      </a>
-                      </span>
-                    </h4>
-                  </div>
-                  <div id="panel_api" class="panel-collapse collapse">
-                    <div class="panel-body">
-                      <div class="list-group">
-                        <div onclick="window.location.href = '#api_get'" class="list-group-item">
-                          <span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                          <div class="method_description">
-                          </div>
-                          <div class="clearfix"></div>
-                        </div>
-                        <div onclick="window.location.href = '#api_post'" class="list-group-item">
-                          <span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                          <div class="method_description">
-                          </div>
-                          <div class="clearfix"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal fade" tabindex="0" id="api_get">
-                    <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                          <h4 class="modal-title" id="myModalLabel">
-                            <span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                            <span class="parent"></span>/api
-                          </h4>
-                        </div>
-                        <div class="modal-body">
-                          <div class="alert alert-warning">
-                            <span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by
-                            <b>custom_scheme</b>
-                            <p>A custom security scheme for authenticating requests.</p>
-                          </div>
+        
+  
 
-                          <!-- Nav tabs -->
-                          <ul class="nav nav-tabs">
-                            <li class="active">
-                              <a href="#api_get_request" data-toggle="tab">Request</a>
-                            </li>
-                            <li>
-                              <a href="#api_get_securedby" data-toggle="tab">Security</a>
-                            </li>
-                          </ul>
+      </header>
 
-                          <!-- Tab panes -->
-                          <div class="tab-content">
-                            <div class="tab-pane active" id="api_get_request">
-                              <h3>Query String</h3>
-                              <ul>
-                                <li>
-                                  <strong>start</strong>:
-                                  <em>(number)
-      </em>
-                                </li>
-                                <li>
-                                  <strong>page-size</strong>:
-                                  <em>(number)
-      </em>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="tab-pane" id="api_get_securedby">
-                              <h1>Secured by custom_scheme</h1>
-                              <h3>Headers</h3>
-                              <ul>
-                                <li>
-                                  <strong>SpecialToken</strong>:
-                                  <em>required (string)
-      </em>
-                                  <p>Used to send a custom token.</p>
-                                </li>
-                              </ul>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/401" target="_blank">401</a>
-                              </h2>
-                              <p>Bad token.</p>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/403" target="_blank">403</a>
-                              </h2>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal fade" tabindex="0" id="api_post">
-                    <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                          <h4 class="modal-title" id="myModalLabel">
-                            <span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                            <span class="parent"></span>/api
-                          </h4>
-                        </div>
-                        <div class="modal-body">
-                          <div class="alert alert-warning">
-                            <span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by
-                            <b>custom_scheme</b>
-                            <p>A custom security scheme for authenticating requests.</p>
-                          </div>
+      <div>
+        
 
-                          <!-- Nav tabs -->
-                          <ul class="nav nav-tabs">
-                            <li class="active">
-                              <a href="#api_post_request" data-toggle="tab">Request</a>
-                            </li>
-                            <li>
-                              <a href="#api_post_securedby" data-toggle="tab">Security</a>
-                            </li>
-                          </ul>
+        
+      </div>
+    </div>
+    <!-- end of resource block for GET /api -->
+  
+    <!-- begin of resource block for POST /api -->
+    
 
-                          <!-- Tab panes -->
-                          <div class="tab-content">
-                            <div class="tab-pane active" id="api_post_request">
-                              <h3>Body</h3>
-                              <p><strong>Media type</strong>: application/json</p>
-                              <p><strong>Type</strong>: object</p>
-                              <strong>Properties</strong>
-                              <ul>
-                                <li>
-                                  <strong>propString</strong>:
-                                  <em>required (string)
-      </em>
-                                </li>
-                                <li>
-                                  <strong>propStringArray1</strong>:
-                                  <em>required (array of string)
-      </em>
-                                </li>
-                                <li>
-                                  <strong>ideas</strong>:
-                                  <em>required (array of object)
-      </em>
-                                  <p><strong>Items</strong>: items</p>
-                                  <div class="items">
-                                    <ul>
-                                      <li>
-                                        <strong>comment</strong>:
-                                        <em>required (string)
-      </em>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </li>
-                                <li>
-                                  <strong>extIdeas</strong>:
-                                  <em>required (object)
-      </em>
-                                  <ul>
-                                    <li>
-                                      <strong>comment</strong>:
-                                      <em>required (string)
-      </em>
-                                    </li>
-                                    <li>
-                                      <strong>createdBy</strong>:
-                                      <em>required (string)
-      </em>
-                                    </li>
-                                  </ul>
-                                </li>
-                                <li>
-                                  <strong>feedback</strong>:
-                                  <em>required (string - default: very nice - minLength: 1 - maxLength: 255 - pattern: [a-zA-Z\s]*)
-      </em>
-                                  <p><strong>Example</strong>:</p>
-                                  <div class="examples">
-                                    <pre><code>very well made</code></pre>
-                                  </div>
-                                </li>
-                                <li>
-                                  <strong>propNumber</strong>:
-                                  <em>required (number - minimum: 0 - maximum: 32)
-      </em>
-                                </li>
-                                <li>
-                                  <strong>propInteger</strong>:
-                                  <em>required (integer - minimum: 3 - maximum: 5)
-      </em>
-                                </li>
-                                <li>
-                                  <strong>propBoolean</strong>:
-                                  <em>required (boolean)
-      </em>
-                                </li>
-                                <li>
-                                  <strong>propDate</strong>:
-                                  <em>required (date-only)
-      </em>
-                                  <p><strong>Example</strong>:</p>
-                                  <div class="examples">
-                                    <pre><code>2015-05-23</code></pre>
-                                  </div>
-                                </li>
-                                <li>
-                                  <strong>userPicture</strong>:
-                                  <em>required (file)
-      </em>
-                                </li>
-                                <li>
-                                  <strong>NilValue</strong>:
-                                  <em>required (object)
-      </em>
-                                  <ul>
-                                    <li>
-                                      <strong>name</strong>:
-                                      <em>required (string)
-      </em>
-                                    </li>
-                                    <li>
-                                      <strong>comment</strong>:
-                                      <em>required (union of
-            string or nil)
-      </em>
-                                    </li>
-                                  </ul>
-                                </li>
-                                <li>
-                                  <strong>CatOrDog</strong>:
-                                  <em>required (union of
-            ApiLib.Cat or ApiLib.Dog)
-      </em>
-                                </li>
-                                <li>
-                                  <strong>CatAndDog</strong>:
-                                  <em>required (object)
-      </em>
-                                  <ul>
-                                    <li>
-                                      <strong>name</strong>:
-                                      <em>required (string)
-      </em>
-                                    </li>
-                                    <li>
-                                      <strong>fangs</strong>:
-                                      <em>required (string)
-      </em>
-                                    </li>
-                                    <li>
-                                      <strong>color</strong>:
-                                      <em>required (string)
-      </em>
-                                    </li>
-                                  </ul>
-                                </li>
-                                <li>
-                                  <strong>PossibleMeetingDate</strong>:
-                                  <em>required (date-only)
-      </em>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="tab-pane" id="api_post_securedby">
-                              <h1>Secured by custom_scheme</h1>
-                              <h3>Headers</h3>
-                              <ul>
-                                <li>
-                                  <strong>SpecialToken</strong>:
-                                  <em>required (string)
-      </em>
-                                  <p>Used to send a custom token.</p>
-                                </li>
-                              </ul>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/401" target="_blank">401</a>
-                              </h2>
-                              <p>Bad token.</p>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/403" target="_blank">403</a>
-                              </h2>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+    <div id="api_post" class="group-endpoint" data-spy data-spy-parent="api">
+      <header>
+        <h4 class="title is-4 is-anchored">
+          /api 
+  <a class="anchor" href="#api_post">¶</a>
+
+          <div class="subtitle is-6">
+            
+  <strong class="method is-post">POST</strong>
+ <span class="value">/api</span>
+          </div>
+        </h4>
+
+        
+  
+
+      </header>
+
+      <div>
+        
+          <h5 class="title is-5">Request</h5>
+          <div class="indent">
+            
+            
+  
+
+            
+  
+
+            
+  
+
+            
+            
+  
+    
+    <div class="tabbable" data-component="tabbable" data-tabbable-id="undefined_body">
+      <header class="tabs is-boxed">
+        <strong class="title is-6">Body</strong>
+        <ul class="tabbable-tabs" data-tabbable-tabs="undefined_body">
+          
+            
+            <li>
+              <a id="api_post_body_0" href="#api_post_body_0" data-tab="0">
+                application/json
+              </a>
+            </li>
+          
+        </ul>
+      </header>
+      <div class="tabbable-contents" data-tabbable-contents="undefined_body">
+        
+          <div data-tab-content="0">
+            
+              
+            
+            
+  
+    
+      <h6 class="title is-6">Properties (object)</h6>
+    
+
+    
+  
+    <table class="table is-property-list">
+      <tbody>
+        
+          <tr>
+            <th scope="row">
+              propString
+              
+  
+    
+      <div class="typedef-type">string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              propStringArray1
+              
+  
+    
+      <div class="typedef-type">Array of string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              ideas
+              
+  
+    
+      <div class="typedef-type">Array of object, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+                <details>
+                  <summary>object[]
+                  </summary>
+                  
+  
+    <table class="table is-property-list">
+      <tbody>
+        
+          <tr>
+            <th scope="row">
+              comment
+              
+  
+    
+      <div class="typedef-type">string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+                </details>
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              extIdeas
+              
+  
+    
+      <div class="typedef-type">object, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+                <details>
+                  <summary>extIdeas</summary>
+                  
+  
+    <table class="table is-property-list">
+      <tbody>
+        
+          <tr>
+            <th scope="row">
+              comment
+              
+  
+    
+      <div class="typedef-type">string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              createdBy
+              
+  
+    
+      <div class="typedef-type">string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+                </details>
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              feedback
+              
+  
+    
+      <div class="typedef-type">string
+          , default: <code>very nice</code>, minimum length: 1,  maximum length: 255, pattern: <code class="value">[a-zA-Z\s]*</code>, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              propNumber
+              
+  
+    
+      <div class="typedef-type">number, minimum: 0, maximum: 32, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              propInteger
+              
+  
+    
+      <div class="typedef-type">integer, minimum: 3, maximum: 5, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              propBoolean
+              
+  
+    
+      <div class="typedef-type">boolean, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              propDate
+              
+  
+    
+      <div class="typedef-type">date-only, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              userPicture
+              
+  
+    
+      <div class="typedef-type">file, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              NilValue
+              
+  
+    
+      <div class="typedef-type">object, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+                <details>
+                  <summary>NilValue</summary>
+                  
+  
+    <table class="table is-property-list">
+      <tbody>
+        
+          <tr>
+            <th scope="row">
+              name
+              
+  
+    
+      <div class="typedef-type">string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              comment
+              
+  
+    
+      <div class="typedef-type">Union of
+            string or nil, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+                </details>
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              CatOrDog
+              
+  
+    
+      <div class="typedef-type">Union of
+            ApiLib.Cat or ApiLib.Dog, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              CatAndDog
+              
+  
+    
+      <div class="typedef-type">ApiLib.Cat, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+                <details>
+                  <summary>CatAndDog</summary>
+                  
+  
+    <table class="table is-property-list">
+      <tbody>
+        
+          <tr>
+            <th scope="row">
+              name
+              
+  
+    
+      <div class="typedef-type">string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              fangs
+              
+  
+    
+      <div class="typedef-type">string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              color
+              
+  
+    
+      <div class="typedef-type">string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+                </details>
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              PossibleMeetingDate
+              
+  
+    
+      <div class="typedef-type">ApiLib.CustomDate, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+  
+
+            
+  
+
+          </div>
+        
+      </div>
+    </div>
+  
+
+          </div>
+        
+
+        
+      </div>
+    </div>
+    <!-- end of resource block for POST /api -->
+  
+  <!-- end of list of methods for /api -->
+
+  
+  
+
+  </div>
+
+              
+                
+  <div id="entry" class="group" data-spy data-spy-parent="__all_resources">
+    <header class="group-header">
+      <div class="group-title">
+        <h3 class="title is-3">/entry</h3>
+      </div>
+      
+  
+
+    </header>
+
+    
+  
+
+  <!-- list of methods for /entry -->
+  
+
+  
+    <!-- begin of resource block for POST /entry -->
+    
+
+    <div id="entry_post" class="group-endpoint" data-spy data-spy-parent="entry">
+      <header>
+        <h4 class="title is-4 is-anchored">
+          /entry 
+  <a class="anchor" href="#entry_post">¶</a>
+
+          <div class="subtitle is-6">
+            
+  <strong class="method is-post">POST</strong>
+ <span class="value">/entry</span>
+          </div>
+        </h4>
+
+        
+  
+
+      </header>
+
+      <div>
+        
+
+        
+          <h5 class="title is-5">Response</h5>
+
+          
+          <div class="tabbable is-vertical" data-component="tabbable" data-tabbable-id="entry_post_response">
+            <header class="tabs is-boxed">
+              <ul class="tabbable-tabs" data-tabbable-tabs="entry_post_response">
+                
+                  
+                  <li>
+                    <a id="entry_post_response_0" href="#entry_post_response_0" data-tab="0">
+                      <span class="status"
+                            data-code="200"></span>
+                    </a>
+                  </li>
+                
+              </ul>
+            </header>
+            <div class="tabbable-contents" data-tabbable-contents="entry_post_response">
+              
+                <div data-tab-content="0">
+                  
+                  
+  
+    
+    <div class="tabbable" data-component="tabbable" data-tabbable-id="undefined_body">
+      <header class="tabs is-boxed">
+        <strong class="title is-6">Body</strong>
+        <ul class="tabbable-tabs" data-tabbable-tabs="undefined_body">
+          
+            
+            <li>
+              <a id="entry_post_body_0" href="#entry_post_body_0" data-tab="0">
+                application/json
+              </a>
+            </li>
+          
+        </ul>
+      </header>
+      <div class="tabbable-contents" data-tabbable-contents="undefined_body">
+        
+          <div data-tab-content="0">
+            
+              
+            
+            
+  
+
+            
+  
+
+          </div>
+        
+      </div>
+    </div>
+  
+
+                  
+                  
+  
+
+                  
+  
+
                 </div>
-              </div>
+              
             </div>
           </div>
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 id="entry" class="panel-title">/entry</h3>
-            </div>
-            <div class="panel-body">
-              <div class="panel-group">
-                <div class="panel panel-white resource-modal">
-                  <div class="panel-heading">
-                    <h4 class="panel-title">
-                      <a class="collapsed" data-toggle="collapse" href="#panel_entry">
-                        <span class="parent"></span>/entry
-                      </a>
-                      <span class="methods">
-            <a href="#entry_post">
-<!-- modal shown by hashchange event -->
-              <span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                      </a>
-                      <a href="#entry_get">
+        
+      </div>
+    </div>
+    <!-- end of resource block for POST /entry -->
+  
+    <!-- begin of resource block for GET /entry -->
+    
 
-                        <!-- modal shown by hashchange event -->
-                        <span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                      </a>
-                      </span>
-                    </h4>
-                  </div>
-                  <div id="panel_entry" class="panel-collapse collapse">
-                    <div class="panel-body">
-                      <div class="list-group">
-                        <div onclick="window.location.href = '#entry_post'" class="list-group-item">
-                          <span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                          <div class="method_description">
-                          </div>
-                          <div class="clearfix"></div>
-                        </div>
-                        <div onclick="window.location.href = '#entry_get'" class="list-group-item">
-                          <span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                          <div class="method_description">
-                            <p>returns a list of entry</p>
-                          </div>
-                          <div class="clearfix"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal fade" tabindex="0" id="entry_post">
-                    <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                          <h4 class="modal-title" id="myModalLabel">
-                            <span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                            <span class="parent"></span>/entry
-                          </h4>
-                        </div>
-                        <div class="modal-body">
-                          <div class="alert alert-warning">
-                            <span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by
-                            <b>custom_scheme</b>
-                            <p>A custom security scheme for authenticating requests.</p>
-                          </div>
+    <div id="entry_get" class="group-endpoint" data-spy data-spy-parent="entry">
+      <header>
+        <h4 class="title is-4 is-anchored">
+          /entry 
+  <a class="anchor" href="#entry_get">¶</a>
 
-                          <!-- Nav tabs -->
-                          <ul class="nav nav-tabs">
-                            <li class="active">
-                              <a href="#entry_post_response" data-toggle="tab">Response</a>
-                            </li>
-                            <li>
-                              <a href="#entry_post_securedby" data-toggle="tab">Security</a>
-                            </li>
-                          </ul>
+          <div class="subtitle is-6">
+            
+  <strong class="method is-get">GET</strong>
+ <span class="value">/entry</span>
+          </div>
+        </h4>
 
-                          <!-- Tab panes -->
-                          <div class="tab-content">
-                            <div class="tab-pane active" id="entry_post_response">
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/200" target="_blank">200</a>
-                              </h2>
-                              <h3>Body</h3>
-                              <p><strong>Media type</strong>: application/json</p>
-                              <p><strong>Type</strong>: json</p>
-                              <p><strong>Content</strong>:</p>
-                              <pre><code>{
-  "type": "array",
-  "items": {
-    "$ref": "#/definitions/song"
-  },
-  "definitions": {
-    "song": {
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string"
-        },
-        "artist": {
-          "type": "string"
-        }
-      }
-    }
-  }
-}
-</code></pre>
-                            </div>
-                            <div class="tab-pane" id="entry_post_securedby">
-                              <h1>Secured by custom_scheme</h1>
-                              <h3>Headers</h3>
-                              <ul>
-                                <li>
-                                  <strong>SpecialToken</strong>:
-                                  <em>required (string)
-      </em>
-                                  <p>Used to send a custom token.</p>
-                                </li>
-                              </ul>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/401" target="_blank">401</a>
-                              </h2>
-                              <p>Bad token.</p>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/403" target="_blank">403</a>
-                              </h2>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal fade" tabindex="0" id="entry_get">
-                    <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                          <h4 class="modal-title" id="myModalLabel">
-                            <span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                            <span class="parent"></span>/entry
-                          </h4>
-                        </div>
-                        <div class="modal-body">
-                          <div class="alert alert-info">
-                            <p>returns a list of entry</p>
-                          </div>
-                          <div class="alert alert-warning">
-                            <span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by
-                            <b>custom_scheme</b>
-                            <p>A custom security scheme for authenticating requests.</p>
-                          </div>
+        
+  
+    <div class="content">
+      <p>returns a list of entry</p>
 
-                          <!-- Nav tabs -->
-                          <ul class="nav nav-tabs">
-                            <li class="active">
-                              <a href="#entry_get_response" data-toggle="tab">Response</a>
-                            </li>
-                            <li>
-                              <a href="#entry_get_securedby" data-toggle="tab">Security</a>
-                            </li>
-                          </ul>
+    </div>
+  
 
-                          <!-- Tab panes -->
-                          <div class="tab-content">
-                            <div class="tab-pane active" id="entry_get_response">
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/200" target="_blank">200</a>
-                              </h2>
-                              <h3>Body</h3>
-                              <p><strong>Media type</strong>: application/json</p>
-                            </div>
-                            <div class="tab-pane" id="entry_get_securedby">
-                              <h1>Secured by custom_scheme</h1>
-                              <h3>Headers</h3>
-                              <ul>
-                                <li>
-                                  <strong>SpecialToken</strong>:
-                                  <em>required (string)
-      </em>
-                                  <p>Used to send a custom token.</p>
-                                </li>
-                              </ul>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/401" target="_blank">401</a>
-                              </h2>
-                              <p>Bad token.</p>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/403" target="_blank">403</a>
-                              </h2>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+      </header>
+
+      <div>
+        
+
+        
+          <h5 class="title is-5">Response</h5>
+
+          
+          <div class="tabbable is-vertical" data-component="tabbable" data-tabbable-id="entry_get_response">
+            <header class="tabs is-boxed">
+              <ul class="tabbable-tabs" data-tabbable-tabs="entry_get_response">
+                
+                  
+                  <li>
+                    <a id="entry_get_response_0" href="#entry_get_response_0" data-tab="0">
+                      <span class="status"
+                            data-code="200"></span>
+                    </a>
+                  </li>
+                
+              </ul>
+            </header>
+            <div class="tabbable-contents" data-tabbable-contents="entry_get_response">
+              
+                <div data-tab-content="0">
+                  
+                  
+  
+    
+    <div class="tabbable" data-component="tabbable" data-tabbable-id="undefined_body">
+      <header class="tabs is-boxed">
+        <strong class="title is-6">Body</strong>
+        <ul class="tabbable-tabs" data-tabbable-tabs="undefined_body">
+          
+            
+            <li>
+              <a id="entry_get_body_0" href="#entry_get_body_0" data-tab="0">
+                application/json
+              </a>
+            </li>
+          
+        </ul>
+      </header>
+      <div class="tabbable-contents" data-tabbable-contents="undefined_body">
+        
+          <div data-tab-content="0">
+            
+              
+            
+            
+  
+
+            
+  
+
+          </div>
+        
+      </div>
+    </div>
+  
+
+                  
+                  
+  
+
+                  
+  
+
                 </div>
-              </div>
+              
             </div>
           </div>
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 id="songs" class="panel-title">Songs</h3>
-            </div>
-            <div class="panel-body">
-              <div class="top-resource-description">
-                <p>Access to all songs inside the music world library.</p>
-              </div>
-              <div class="panel-group">
-                <div class="panel panel-white resource-modal">
-                  <div class="panel-heading">
-                    <h4 class="panel-title">
-                      <a class="collapsed" data-toggle="collapse" href="#panel_songs">
-                        <span class="parent"></span>/songs
-                      </a>
-                      <span class="methods">
-            <a href="#songs_get">
-<!-- modal shown by hashchange event -->
-              <span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                      </a>
-                      <a href="#songs_post">
+        
+      </div>
+    </div>
+    <!-- end of resource block for GET /entry -->
+  
+  <!-- end of list of methods for /entry -->
 
-                        <!-- modal shown by hashchange event -->
-                        <span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                      </a>
-                      </span>
-                    </h4>
-                  </div>
-                  <div id="panel_songs" class="panel-collapse collapse">
-                    <div class="panel-body">
-                      <div class="list-group">
-                        <div onclick="window.location.href = '#songs_get'" class="list-group-item">
-                          <span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                          <div class="method_description">
-                          </div>
-                          <div class="clearfix"></div>
-                        </div>
-                        <div onclick="window.location.href = '#songs_post'" class="list-group-item">
-                          <span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                          <div class="method_description">
-                          </div>
-                          <div class="clearfix"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal fade" tabindex="0" id="songs_get">
-                    <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                          <h4 class="modal-title" id="myModalLabel">
-                            <span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                            <span class="parent"></span>/songs
-                          </h4>
-                        </div>
-                        <div class="modal-body">
-                          <div class="alert alert-warning">
-                            <span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by
-                            <b>oauth_2_0</b>
-                            <p>Dropbox supports OAuth 2.0 for authenticating all API requests.</p>
-                          </div>
+  
+  
 
-                          <!-- Nav tabs -->
-                          <ul class="nav nav-tabs">
-                            <li class="active">
-                              <a href="#songs_get_request" data-toggle="tab">Request</a>
-                            </li>
-                            <li>
-                              <a href="#songs_get_securedby" data-toggle="tab">Security</a>
-                            </li>
-                          </ul>
+  </div>
 
-                          <!-- Tab panes -->
-                          <div class="tab-content">
-                            <div class="tab-pane active" id="songs_get_request">
-                              <h3>Annotations</h3>
-                              <ul>
-                                <li>
-                                  <strong>monitoringInterval</strong>
-                                  <pre><code>30</code></pre>
-                                </li>
-                              </ul>
-                              <h3>Query Parameters</h3>
-                              <ul>
-                                <li>
-                                  <strong>genre</strong>:
-                                  <em>required (string)
-      </em>
-                                  <p>filter the songs by genre</p>
-                                </li>
-                                <li>
-                                  <strong>access_token</strong>:
-                                  <em>required (string)
-      </em>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="tab-pane" id="songs_get_securedby">
-                              <h1>Secured by oauth_2_0</h1>
-                              <h3>Headers</h3>
-                              <ul>
-                                <li>
-                                  <strong>Authorization</strong>:
-                                  <em>required (string)
-      </em>
-                                  <p>Used to send a valid OAuth 2 access token. Do not use with the "access_token" query string parameter.</p>
-                                </li>
-                              </ul>
-                              <h3>Query Parameters</h3>
-                              <ul>
-                                <li>
-                                  <strong>access_token</strong>:
-                                  <em>required (string)
-      </em>
-                                  <p>Used to send a valid OAuth 2 access token. Do not use with the "Authorization" header.</p>
-                                </li>
-                              </ul>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/401" target="_blank">401</a>
-                              </h2>
-                              <p>Bad or expired token. This can happen if the user or Dropbox revoked or expired an access token. To fix, re-authenticate the user.</p>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/403" target="_blank">403</a>
-                              </h2>
-                              <p>Bad OAuth request (wrong consumer key, bad nonce, expired timestamp...). Unfortunately, re-authenticating the user won&#39;t help here.</p>
-                              <h1>Secured by </h1>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal fade" tabindex="0" id="songs_post">
-                    <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                          <h4 class="modal-title" id="myModalLabel">
-                            <span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                            <span class="parent"></span>/songs
-                          </h4>
-                        </div>
-                        <div class="modal-body">
-                          <div class="alert alert-warning">
-                            <span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by
-                            <b>custom_scheme</b>
-                            <p>A custom security scheme for authenticating requests.</p>
-                          </div>
+              
+                
+  <div id="songs" class="group" data-spy data-spy-parent="__all_resources">
+    <header class="group-header">
+      <div class="group-title">
+        <h3 class="title is-3">Songs</h3>
+      </div>
+      
+  
+    <div class="content">
+      <p>Access to all songs inside the music world library.</p>
 
-                          <!-- Nav tabs -->
-                          <ul class="nav nav-tabs">
-                            <li class="active">
-                              <a href="#songs_post_request" data-toggle="tab">Request</a>
-                            </li>
-                            <li>
-                              <a href="#songs_post_securedby" data-toggle="tab">Security</a>
-                            </li>
-                          </ul>
+    </div>
+  
 
-                          <!-- Tab panes -->
-                          <div class="tab-content">
-                            <div class="tab-pane active" id="songs_post_request">
-                              <h3>Query Parameters</h3>
-                              <ul>
-                                <li>
-                                  <strong>access_token</strong>:
-                                  <em>required (string)
-      </em>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="tab-pane" id="songs_post_securedby">
-                              <h1>Secured by custom_scheme</h1>
-                              <h3>Headers</h3>
-                              <ul>
-                                <li>
-                                  <strong>SpecialToken</strong>:
-                                  <em>required (string)
-      </em>
-                                  <p>Used to send a custom token.</p>
-                                </li>
-                              </ul>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/401" target="_blank">401</a>
-                              </h2>
-                              <p>Bad token.</p>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/403" target="_blank">403</a>
-                              </h2>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="panel panel-white resource-modal">
-                  <div class="panel-heading">
-                    <h4 class="panel-title">
-                      <a class="collapsed" data-toggle="collapse" href="#panel_songs__songid_">
-                        <span class="parent">/songs</span>/{songId}
-                      </a>
-                      <span class="methods">
-            <a href="#songs__songid__get">
-<!-- modal shown by hashchange event -->
-              <span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                      </a>
-                      </span>
-                    </h4>
-                  </div>
-                  <div id="panel_songs__songid_" class="panel-collapse collapse">
-                    <div class="panel-body">
-                      <div class="list-group">
-                        <div onclick="window.location.href = '#songs__songid__get'" class="list-group-item">
-                          <span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                          <div class="method_description">
-                          </div>
-                          <div class="clearfix"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal fade" tabindex="0" id="songs__songid__get">
-                    <div class="modal-dialog modal-lg">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                          <h4 class="modal-title" id="myModalLabel">
-                            <span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span>
-                            <span class="parent">/songs</span>/{songId}
-                          </h4>
-                        </div>
-                        <div class="modal-body">
-                          <div class="alert alert-warning">
-                            <span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by
-                            <b>custom_scheme</b>
-                            <p>A custom security scheme for authenticating requests.</p>
-                          </div>
+    </header>
 
-                          <!-- Nav tabs -->
-                          <ul class="nav nav-tabs">
-                            <li class="active">
-                              <a href="#songs__songid__get_request" data-toggle="tab">Request</a>
-                            </li>
-                            <li>
-                              <a href="#songs__songid__get_response" data-toggle="tab">Response</a>
-                            </li>
-                            <li>
-                              <a href="#songs__songid__get_securedby" data-toggle="tab">Security</a>
-                            </li>
-                          </ul>
+    
+  
 
-                          <!-- Tab panes -->
-                          <div class="tab-content">
-                            <div class="tab-pane active" id="songs__songid__get_request">
-                              <h3>URI Parameters</h3>
-                              <ul>
-                                <li>
-                                  <strong>songId</strong>:
-                                  <em>required (string)
-      </em>
-                                </li>
-                              </ul>
-                              <h3>Annotations</h3>
-                              <ul>
-                                <li>
-                                  <strong>deprecated</strong>
-                                  <pre><code>{"date":"2016-02-28T16:41:41.090Z","deprecatedBy":{"firstname":"Christian"},"comment":"no comment"}</code></pre>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="tab-pane" id="songs__songid__get_response">
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/200" target="_blank">200</a>
-                              </h2>
-                              <h3>Body</h3>
-                              <p><strong>Media type</strong>: application/json</p>
-                              <p><strong>Type</strong>: object</p>
-                              <strong>Properties</strong>
-                              <ul>
-                                <li>
-                                  <strong>title</strong>:
-                                  <em>required (string)
-      </em>
-                                </li>
-                                <li>
-                                  <strong>length</strong>:
-                                  <em>required (number)
-      </em>
-                                </li>
-                              </ul>
-                              <p><strong>Examples</strong>:</p>
-                              <div class="examples">
-                                <p>
-                                  <strong>song1</strong>:
-                                  <br />
-                                </p>
-                                <pre><code>{
+  <!-- list of methods for /songs -->
+  
+
+  
+    <!-- begin of resource block for GET /songs -->
+    
+
+    <div id="songs_get" class="group-endpoint" data-spy data-spy-parent="songs">
+      <header>
+        <h4 class="title is-4 is-anchored">
+          /songs 
+  <a class="anchor" href="#songs_get">¶</a>
+
+          <div class="subtitle is-6">
+            
+  <strong class="method is-get">GET</strong>
+ <span class="value">/songs</span>
+          </div>
+        </h4>
+
+        
+  
+
+      </header>
+
+      <div>
+        
+          <h5 class="title is-5">Request</h5>
+          <div class="indent">
+            
+            
+  
+
+            
+  
+
+            
+  
+    
+      <h6 class="title is-6">Query Parameters</h6>
+    
+
+    
+  
+    <table class="table is-property-list">
+      <tbody>
+        
+          <tr>
+            <th scope="row">
+              genre
+              
+  
+    
+      <div class="typedef-type">string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+    <div class="content">
+      <p>filter the songs by genre</p>
+
+    </div>
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              access_token
+              
+  
+    
+      <div class="typedef-type">string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+  
+
+            
+            
+  
+
+          </div>
+        
+
+        
+      </div>
+    </div>
+    <!-- end of resource block for GET /songs -->
+  
+    <!-- begin of resource block for POST /songs -->
+    
+
+    <div id="songs_post" class="group-endpoint" data-spy data-spy-parent="songs">
+      <header>
+        <h4 class="title is-4 is-anchored">
+          /songs 
+  <a class="anchor" href="#songs_post">¶</a>
+
+          <div class="subtitle is-6">
+            
+  <strong class="method is-post">POST</strong>
+ <span class="value">/songs</span>
+          </div>
+        </h4>
+
+        
+  
+
+      </header>
+
+      <div>
+        
+          <h5 class="title is-5">Request</h5>
+          <div class="indent">
+            
+            
+  
+
+            
+  
+
+            
+  
+    
+      <h6 class="title is-6">Query Parameters</h6>
+    
+
+    
+  
+    <table class="table is-property-list">
+      <tbody>
+        
+          <tr>
+            <th scope="row">
+              access_token
+              
+  
+    
+      <div class="typedef-type">string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+  
+
+            
+            
+  
+
+          </div>
+        
+
+        
+      </div>
+    </div>
+    <!-- end of resource block for POST /songs -->
+  
+  <!-- end of list of methods for /songs -->
+
+  
+  
+    
+  
+
+  <!-- list of methods for /songs/{songId} -->
+  
+    <span id="songs__songid_" class="group-resource-group-marker"
+          data-spy data-spy-parent="songs"></span>
+  
+
+  
+    <!-- begin of resource block for GET /songs/{songId} -->
+    
+
+    <div id="songs__songid__get" class="group-endpoint" data-spy data-spy-parent="songs__songid_">
+      <header>
+        <h4 class="title is-4 is-anchored">
+          /songs/{songId} 
+  <a class="anchor" href="#songs__songid__get">¶</a>
+
+          <div class="subtitle is-6">
+            
+  <strong class="method is-get">GET</strong>
+ <span class="value">/songs/{songId}</span>
+          </div>
+        </h4>
+
+        
+  
+
+      </header>
+
+      <div>
+        
+          <h5 class="title is-5">Request</h5>
+          <div class="indent">
+            
+            
+  
+    
+      <h6 class="title is-6">Path Variables</h6>
+    
+
+    
+  
+    <table class="table is-property-list">
+      <tbody>
+        
+          <tr>
+            <th scope="row">
+              songId
+              
+  
+    
+      <div class="typedef-type">string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+  
+
+            
+  
+
+            
+  
+
+            
+            
+  
+
+          </div>
+        
+
+        
+          <h5 class="title is-5">Response</h5>
+
+          
+          <div class="tabbable is-vertical" data-component="tabbable" data-tabbable-id="songs__songid__get_response">
+            <header class="tabs is-boxed">
+              <ul class="tabbable-tabs" data-tabbable-tabs="songs__songid__get_response">
+                
+                  
+                  <li>
+                    <a id="songs__songid__get_response_0" href="#songs__songid__get_response_0" data-tab="0">
+                      <span class="status"
+                            data-code="200"></span>
+                    </a>
+                  </li>
+                
+              </ul>
+            </header>
+            <div class="tabbable-contents" data-tabbable-contents="songs__songid__get_response">
+              
+                <div data-tab-content="0">
+                  
+                  
+  
+    
+    <div class="tabbable" data-component="tabbable" data-tabbable-id="undefined_body">
+      <header class="tabs is-boxed">
+        <strong class="title is-6">Body</strong>
+        <ul class="tabbable-tabs" data-tabbable-tabs="undefined_body">
+          
+            
+            <li>
+              <a id="songs__songid__get_body_0" href="#songs__songid__get_body_0" data-tab="0">
+                application/json
+              </a>
+            </li>
+          
+            
+            <li>
+              <a id="songs__songid__get_body_1" href="#songs__songid__get_body_1" data-tab="1">
+                application/xml
+              </a>
+            </li>
+          
+        </ul>
+      </header>
+      <div class="tabbable-contents" data-tabbable-contents="undefined_body">
+        
+          <div data-tab-content="0">
+            
+              
+            
+            
+  
+    
+      <h6 class="title is-6">Properties (object)</h6>
+    
+
+    
+  
+    <table class="table is-property-list">
+      <tbody>
+        
+          <tr>
+            <th scope="row">
+              title
+              
+  
+    
+      <div class="typedef-type">string, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+          <tr>
+            <th scope="row">
+              length
+              
+  
+    
+      <div class="typedef-type">number, <strong class="typedef-required">required</strong></div>
+    
+  
+
+            </th>
+            <td>
+              
+  
+
+              
+              
+            </td>
+          </tr>
+        
+      </tbody>
+    </table>
+  
+
+  
+
+            
+  
+    
+      <h6 class="title is-6">Examples</h6>
+    
+    <ul>
+      
+        <li>
+          <details>
+            <summary>song1</summary>
+            <pre><code>{
   "title": "My Song",
   "length": 12
 }</code></pre>
-                                <p>
-                                  <strong>song2</strong>:
-                                  <br />
-                                </p>
-                                <pre><code>{
+          </details>
+        </li>
+      
+        <li>
+          <details>
+            <summary>song2</summary>
+            <pre><code>{
   "title": "Last",
   "length": 3
 }</code></pre>
-                              </div>
-                              <p><strong>Media type</strong>: application/xml</p>
-                              <p><strong>Type</strong>:</p>
-                              <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  elementFormDefault="qualified" attributeFormDefault="unqualified"&gt;
-  &lt;xs:element name="song"&gt;
-    &lt;xs:complexType&gt;
-      &lt;xs:sequence&gt;
-        &lt;xs:element name="title" type="xs:string" /&gt;
-        &lt;xs:element name="artist" type="xs:string" /&gt;
-      &lt;/xs:sequence&gt;
-    &lt;/xs:complexType&gt;
-  &lt;/xs:element&gt;
-&lt;/xs:schema&gt;
+          </details>
+        </li>
+      
+    </ul>
+  
+
+          </div>
+        
+          <div data-tab-content="1">
+            
+              
+            
+            
+  
+
+            
+  
+    
+      <h6 class="title is-6">Examples</h6>
+    
+    <ul>
+      
+        <li>
+          <details>
+            <summary>Example</summary>
+            <pre><code><?xml version="1.0" encoding="utf-8"?>
+<song>
+  <title>str1234</title>
+  <artist>str1234</artist>
+</song>
 </code></pre>
-                              <p><strong>Example</strong>:</p>
-                              <div class="examples">
-                                <pre><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;song&gt;
-  &lt;title&gt;str1234&lt;/title&gt;
-  &lt;artist&gt;str1234&lt;/artist&gt;
-&lt;/song&gt;
-</code></pre>
-                              </div>
-                            </div>
-                            <div class="tab-pane" id="songs__songid__get_securedby">
-                              <h1>Secured by custom_scheme</h1>
-                              <h3>Headers</h3>
-                              <ul>
-                                <li>
-                                  <strong>SpecialToken</strong>:
-                                  <em>required (string)
-      </em>
-                                  <p>Used to send a custom token.</p>
-                                </li>
-                              </ul>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/401" target="_blank">401</a>
-                              </h2>
-                              <p>Bad token.</p>
-                              <h2>HTTP status code
-                                <a href="http://httpstatus.es/403" target="_blank">403</a>
-                              </h2>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+          </details>
+        </li>
+      
+    </ul>
+  
+
+          </div>
+        
+      </div>
+    </div>
+  
+
+                  
+                  
+  
+    
+        
+          
+
+          <h6 class="title is-6">
+            deprecated
+          </h6>
+
+          
+        
+    
+  
+
+                  
+  
+
                 </div>
-              </div>
+              
             </div>
           </div>
-        </div>
-        <div class="col-md-3">
-          <div id="sidebar" class="hidden-print affix" role="complementary">
-            <ul class="nav nav-pills nav-stacked">
-              <li>
-                <a href="#api">/api</a>
-              </li>
-              <li>
-                <a href="#entry">/entry</a>
-              </li>
-              <li>
-                <a href="#songs">Songs</a>
-              </li>
-            </ul>
-          </div>
+        
+      </div>
+    </div>
+    <!-- end of resource block for GET /songs/{songId} -->
+  
+  <!-- end of list of methods for /songs/{songId} -->
+
+  
+  
+
+  
+
+  </div>
+
+              
+            </section>
+
+            <section id="__all_types" class="section" data-spy>
+              <h2 class="title is-2">Type Reference</h2>
+              
+                
+  <div class="subsection" id="type__AnotherEntry" data-spy data-spy-parent="__all_types">
+    <h3 class="title is-3 is-anchored"
+        >
+      AnotherEntry 
+  <a class="anchor" href="#type__AnotherEntry">¶</a>
+
+    </h3>
+
+    
+  
+    <div class="content">
+      <p>This is just another entry to simulate that you can add facets also on JSON
+schema defined types. Although you can only add documentation-based facets.</p>
+
+    </div>
+  
+
+
+    
+    
+    
+    
+      <h4 class="title is-6">Type Information</h4>
+      <div class="typedef-standalone">
+        
+  
+    
+      <div class="typedef-type"><a href="#type__AnotherEntry" title="Jump to 'AnotherEntry' type docs"
+     data-component="preview">AnotherEntry</a> (json)</div>
+    
+  
+
+      </div>
+    
+    
+  
+
+    
+  
+
+  </div>
+
+              
+                
+  <div class="subsection" id="type__ApiLib.Cat" data-spy data-spy-parent="__all_types">
+    <h3 class="title is-3 is-anchored"
+        >
+      Cat 
+  <a class="anchor" href="#type__ApiLib.Cat">¶</a>
+
+    </h3>
+
+    
+  
+
+
+    
+    
+    
+    
+      <h4 class="title is-6">Type Information</h4>
+      <div class="typedef-standalone">
+        
+  
+    
+      <div class="typedef-type">object</div>
+    
+  
+
+      </div>
+    
+    
+  
+
+    
+  
+
+  </div>
+
+              
+                
+  <div class="subsection" id="type__ApiLib.CustomDate" data-spy data-spy-parent="__all_types">
+    <h3 class="title is-3 is-anchored"
+        >
+      CustomDate 
+  <a class="anchor" href="#type__ApiLib.CustomDate">¶</a>
+
+    </h3>
+
+    
+  
+
+
+    
+    
+    
+    
+      <h4 class="title is-6">Type Information</h4>
+      <div class="typedef-standalone">
+        
+  
+    
+      <div class="typedef-type">date-only</div>
+    
+  
+
+      </div>
+    
+    
+  
+
+    
+  
+
+  </div>
+
+              
+                
+  <div class="subsection" id="type__ApiLib.Dog" data-spy data-spy-parent="__all_types">
+    <h3 class="title is-3 is-anchored"
+        >
+      Dog 
+  <a class="anchor" href="#type__ApiLib.Dog">¶</a>
+
+    </h3>
+
+    
+  
+
+
+    
+    
+    
+    
+      <h4 class="title is-6">Type Information</h4>
+      <div class="typedef-standalone">
+        
+  
+    
+      <div class="typedef-type">object</div>
+    
+  
+
+      </div>
+    
+    
+  
+
+    
+  
+
+  </div>
+
+              
+                
+  <div class="subsection" id="type__ApiLib.RamlDataType" data-spy data-spy-parent="__all_types">
+    <h3 class="title is-3 is-anchored"
+        >
+      RamlDataType 
+  <a class="anchor" href="#type__ApiLib.RamlDataType">¶</a>
+
+    </h3>
+
+    
+  
+
+
+    
+    
+    
+    
+      <h4 class="title is-6">Type Information</h4>
+      <div class="typedef-standalone">
+        
+  
+    
+      <div class="typedef-type">object</div>
+    
+  
+
+      </div>
+    
+    
+  
+
+    
+  
+
+  </div>
+
+              
+                
+  <div class="subsection" id="type__Entry" data-spy data-spy-parent="__all_types">
+    <h3 class="title is-3 is-anchored"
+        >
+      Entry 
+  <a class="anchor" href="#type__Entry">¶</a>
+
+    </h3>
+
+    
+  
+
+
+    
+    
+    
+    
+      <h4 class="title is-6">Type Information</h4>
+      <div class="typedef-standalone">
+        
+  
+    
+      <div class="typedef-type"><a href="#type__Entry" title="Jump to 'Entry' type docs"
+     data-component="preview">Entry</a> (json)</div>
+    
+  
+
+      </div>
+    
+    
+  
+
+    
+  
+
+  </div>
+
+              
+                
+  <div class="subsection" id="type__SongsLib.Song" data-spy data-spy-parent="__all_types">
+    <h3 class="title is-3 is-anchored"
+        >
+      Song 
+  <a class="anchor" href="#type__SongsLib.Song">¶</a>
+
+    </h3>
+
+    
+  
+
+
+    
+    
+    
+    
+      <h4 class="title is-6">Type Information</h4>
+      <div class="typedef-standalone">
+        
+  
+    
+      <div class="typedef-type">object</div>
+    
+  
+
+      </div>
+    
+    
+  
+
+    
+  
+    
+      <h4 class="title is-6">Examples</h4>
+    
+    <ul>
+      
+        <li>
+          <details>
+            <summary>song1</summary>
+            <pre><code>{
+  "title": "My Song",
+  "length": 12
+}</code></pre>
+          </details>
+        </li>
+      
+        <li>
+          <details>
+            <summary>song2</summary>
+            <pre><code>{
+  "title": "Last",
+  "length": 3
+}</code></pre>
+          </details>
+        </li>
+      
+    </ul>
+  
+
+  </div>
+
+              
+                
+  <div class="subsection" id="type__User" data-spy data-spy-parent="__all_types">
+    <h3 class="title is-3 is-anchored"
+        >
+      User 
+  <a class="anchor" href="#type__User">¶</a>
+
+    </h3>
+
+    
+  
+
+
+    
+    
+    
+    
+    
+  
+
+    
+  
+    
+      <h4 class="title is-6">Examples</h4>
+    
+    <ul>
+      
+        <li>
+          <details>
+            <summary>Example</summary>
+            <pre><code>{
+  "firstname": "John"
+}</code></pre>
+          </details>
+        </li>
+      
+    </ul>
+  
+
+  </div>
+
+              
+            </section>
+          </main>
         </div>
       </div>
     </div>
+    <script src="./assets/docs.js"></script>
   </body>
 </html>

@@ -1,0 +1,128 @@
+{% from './util.nunjucks' import render_markdown, property_section, body_section,
+                                 example_section, method_verb, anchor, type_info,
+                                 annotation_section %}
+
+
+
+{% macro resource_group(r) %}
+  <div id="{{ r.uniqueId }}" class="group" data-spy data-spy-parent="__all_resources">
+    <header class="group-header">
+      <div class="group-title">
+        <h3 class="title is-3">{{ r.displayName | default(r.relativeUri, True) }}</h3>
+      </div>
+      {{ render_markdown(r.description, headingBaseLevel=3) }}
+    </header>
+
+    {{ resource_detail(r) }}
+  </div>
+{% endmacro %}
+
+
+
+{% macro resource_detail(r, parent) %}
+  {% set uri = r.parentUrl + r.relativeUri %}
+
+  <!-- list of methods for {{ uri }} -->
+  {% if parent %}
+    <span id="{{ r.uniqueId }}" class="group-resource-group-marker"
+          {% if parent %}data-spy data-spy-parent="{{ parent.uniqueId }}"{% endif %}></span>
+  {% endif %}
+
+  {% for method in r.methods %}
+    <!-- begin of resource block for {{ method.method | upper }} {{ uri }} -->
+    {% set method_id = r.uniqueId + '_' + method.method %}
+
+    <div id="{{ method_id }}" class="group-endpoint" data-spy data-spy-parent="{{ r.uniqueId }}">
+      <header>
+        <h4 class="title is-4 is-anchored">
+          {{ method.displayName | default(uri, True) }} {{ anchor(method_id) }}
+          <div class="subtitle is-6">
+            {{ method_verb(method) }} <span class="value">{{ uri }}</span>
+          </div>
+        </h4>
+
+        {{ render_markdown(method.description, headingBaseLevel=4) }}
+      </header>
+
+      <div>
+        {% if any(isIterable, [method.allUriParameters, method.headers, method.queryParameters, method.body]) %}
+          <h5 class="title is-5">Request</h5>
+          <div class="indent">
+            {# render simple parameters #}
+            {{ property_section('Path Variables', method.allUriParameters) }}
+            {{ property_section('Request Headers', method.headers) }}
+            {{ property_section('Query Parameters', method.queryParameters) }}
+            {# render methods with bodies (i.e. PUT and POST requests) #}
+            {{ body_section(method_id, method.body) }}
+          </div>
+        {% endif %}
+
+        {% if isIterable(method.responses) %}
+          <h5 class="title is-5">Response</h5>
+
+          {% set tabs_id = method_id + '_response' %}
+          <div class="tabbable is-vertical" data-component="tabbable" data-tabbable-id="{{ tabs_id }}">
+            <header class="tabs is-boxed">
+              <ul class="tabbable-tabs" data-tabbable-tabs="{{ tabs_id }}">
+                {% for response in method.responses %}
+                  {% set tab_id = method_id + '_response_' + loop.index0 %}
+                  <li>
+                    <a id="{{tab_id }}" href="#{{ tab_id }}" data-tab="{{ loop.index0 }}">
+                      <span class="status"
+                            data-code="{{ response.key | default(response.name, true) }}"></span>
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </header>
+            <div class="tabbable-contents" data-tabbable-contents="{{ tabs_id }}">
+              {% for response in method.responses %}
+                <div data-tab-content="{{ loop.index0 }}">
+                  {% if response.description %}
+                    {{ render_markdown(response.description) }}
+                  {% endif %}
+                  {{ body_section(method_id, response.body) }}
+                  {# render annotations #}
+                  {{ annotation_section(method.annotations) }}
+                  {{ example_section(null, response.examples) }}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <!-- end of resource block for {{ method.method | upper }} {{ uri }} -->
+  {% endfor %}
+  <!-- end of list of methods for {{ uri }} -->
+
+  {# iterate sub-resources #}
+  {% for resource in r.resources %}
+    {{ resource_detail(resource, r) }}
+  {% endfor %}
+{% endmacro %}
+
+
+
+{% macro type_detail(type) %}
+  <div class="subsection" id="{{ type.uniqueId }}" data-spy data-spy-parent="__all_types">
+    <h3 class="title is-3 is-anchored"
+        {% if type.displayName and type.displayName !== type.name %}title="{{ type.displayName }}"{% endif %}>
+      {{ type.name }} {{ anchor(type.uniqueId) }}
+    </h3>
+
+    {{ render_markdown(type.description, headingBaseLevel=3) }}
+
+    {# only show type information if the stripped content of it is != the type.name property #}
+    {% set t_info = type_info(type, standalone=true) %}
+    {% set t_info_cmp =  t_info | striptags | trim %}
+    {% if type.name != t_info_cmp %}
+      <h4 class="title is-6">Type Information</h4>
+      <div class="typedef-standalone">
+        {{ t_info }}
+      </div>
+    {% endif %}
+    {{ property_section('Properties', type.properties, h=4, hDisplay=6) }}
+    {{ example_section(null, type.examples, h=4, hDisplay=6) }}
+  </div>
+{% endmacro %}

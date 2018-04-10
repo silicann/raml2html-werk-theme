@@ -1,0 +1,60 @@
+<aside class="sidebar">
+  <nav class="menu section">
+    <p class="menu-label">Info</p>
+    <ul class="menu-list">
+      <li>
+        <a href="#__basic_information_docs">
+          Basic Information
+        </a>
+      </li>
+      {% for chapter in documentation %}
+        <li>
+          <a href="#{{ chapter.uniqueId }}">
+            {{ chapter.title }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <p class="menu-label">Resources</p>
+    <ul class="menu-list">
+      {% for resource in resources %}
+        <li>
+          <a href="#{{ resource.uniqueId }}">
+            {{ resource.displayName | default(resource.relativeUri, true) }}
+          </a>
+
+          {% if resource.resources.length  %}
+            <ul>
+              <li>
+                <a href="#{{ resource.uniqueId }}">
+                  {{ resource.relativeUri }}
+                </a>
+              </li>
+              {% for subresource in resource.resources %}
+                <li>
+                  {% set subresourceUri = subresource.parentUrl + subresource.relativeUri %}
+                  <a href="#{{ subresource.uniqueId }}">
+                    {{ subresourceUri }}
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+    {% if types %}
+      <p class="menu-label">Types</p>
+      <ul class="menu-list">
+        {% for typeName, type in types | dictsort %}
+          <li>
+            <a href="#{{ type.uniqueId }}">
+              {{ type.name | default(type.displayName, true) }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </nav>
+</aside>
