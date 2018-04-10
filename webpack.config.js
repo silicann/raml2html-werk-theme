@@ -8,15 +8,19 @@ module.exports = {
   ],
   output: {
     path: path.join(__dirname, 'dist', 'assets'),
-    publicPath: './',
-    chunkFilename: './assets/[name].docs.js',
+    publicPath: './assets/',
     filename: 'docs.js'
   },
   module: {
     rules: [
       {
         test: /\.(woff|woff2|eot|ttf|otf|svg)$/,
-        use: { loader: 'file-loader' }
+        use: {
+          loader: 'file-loader',
+          options: {
+            publicPath: './'
+          }
+        }
       },
       {
         test: /\.js$/,
