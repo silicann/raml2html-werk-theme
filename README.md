@@ -34,7 +34,11 @@ There are still some things, that we’d like to implement (ordered by priority)
 
   The menu on the left hand side is just static. Instead it should indicate the current menu-item, show sub-menus when scrolling the page and (in case of rather large api documentations) scroll with the content on the page.
   
-* Document Search
+* Better non-desktop media support
+
+  Though we believe that most of the users that use API documentation will view them on HD displays, proper rendering on tablets and smartphones is desirable.
+  
+* Document search
 
   With all the meta-data from raml it should be possible to implement a more sophisticated search than the one the browser supports.
   
