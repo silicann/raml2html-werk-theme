@@ -2,6 +2,11 @@
 
 A [bulma](https://bulma.io/) and [open-color](https://yeun.github.io/open-color/) based single-page theme that is easily searchable and offline-ready.
 
+
+ Example API                     | Example Request
+:-------------------------------:|:-----------------------------------:
+ ![front](./docs/front_800x.png) | ![request](./docs/request_800x.png)
+
 ## General use
 
 ```sh
