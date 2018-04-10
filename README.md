@@ -20,7 +20,7 @@ This theme is intended for general use and we would love to see others use it. T
 
 ### REQUIRED raml2html version 
 
-As of April 10th, 2018 this theme requires the `develop` branch version of raml2html in order to produce a working output. This is because we bundle assets with the HTML instead of referencing them on external CDNs.
+This theme requires raml2html v7.1.0+.
 
 ### Annotations
 
