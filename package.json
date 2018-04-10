@@ -1,7 +1,7 @@
 {
   "name": "raml2html-werk-theme",
   "description": "a bulma and open-color based single-page theme that is easily searchable and offline-ready",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "main": "config.js",
   "author": {
     "name": "Konrad Mohrfeldt",
