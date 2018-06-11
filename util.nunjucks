@@ -188,7 +188,7 @@
   {% if isIterable(props) %}
     <table class="table is-property-list">
       <tbody>
-        {% for prop in props %}
+        {% for prop in iter(props) %}
           <tr>
             <th scope="row">
               {{ prop.key | default(prop.name, true) }}

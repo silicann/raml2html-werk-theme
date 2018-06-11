@@ -16,7 +16,11 @@ function isStandardType (type) {
 }
 
 function isIterable (it) {
-  return it && it.length > 0
+  return it && (it.length > 0 || Object.values(it).length > 0)
+}
+
+function iter (it) {
+  return it.length > 0 ? it : Object.values(it)
 }
 
 function any (check, args) {
@@ -85,6 +89,7 @@ function createRenderEngine (raml) {
     })
     .addGlobal('isStandardType', isStandardType)
     .addGlobal('isIterable', isIterable)
+    .addGlobal('iter', iter)
     .addGlobal('any', any)
     .addGlobal('is', is)
     .addGlobal('dump', dump)
