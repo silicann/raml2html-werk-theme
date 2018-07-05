@@ -27,6 +27,11 @@
     {{ type_reference_link(raml.types[prop.originalType]) }}
   {%- elif is('string', prop) -%}
     {{ prop }}
+  {%- elif prop.type === 'union' and isIterable(prop.anyOf) -%}
+    Union of {% for alt in prop.anyOf -%}
+      {{ type_name(alt) | trim }}
+      {%- if not loop.last %} or {% endif -%}
+    {%- endfor -%}
   {%- else -%}
     {%- set _type = prop.originalType | default(prop.type, true) -%}
     {%- if _type === 'nil' -%}null{%- else -%}{{ _type }}{%- endif -%}
@@ -217,6 +222,18 @@
                   </summary>
                   {{ property_table(prop.items.properties) }}
                 </details>
+              {% endif %}
+              {% if prop.items and prop.items.type === 'union' %}
+                <div>
+                  {% for type in prop.items.anyOf %}
+                    {% if type.properties %}
+                      <details>
+                        <summary>{{ type_name(type) }}</summary>
+                        {{ property_table(type.properties) }}
+                      </details>
+                    {% endif %}
+                  {% endfor %}
+                </div>
               {% endif %}
             </td>
           </tr>
