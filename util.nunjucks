@@ -86,7 +86,7 @@
           {%- if prop.maxLength or prop.maxLength == 0 %},  maximum length: {{ prop.maxLength }}{%- endif -%}
         {%- else -%}
           {%- if prop.minItems or prop.minItems == 0 %}, minimum items: {{ prop.minItems }}{%- endif -%}
-          {%- if prop.maxItems or prop.maxItems == 0 %}, maxmium items: {{ prop.maxItems }}{%- endif -%}
+          {%- if prop.maxItems or prop.maxItems == 0 %}, maximum items: {{ prop.maxItems }}{%- endif -%}
           {%- if prop.minimum or prop.minimum == 0 %}, minimum: {{ prop.minimum }}{%- endif -%}
           {%- if prop.maximum or prop.maximum == 0 %}, maximum: {{ prop.maximum }}{%- endif -%}
         {%- endif -%}
