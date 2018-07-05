@@ -14,6 +14,8 @@ npm install raml2html-werk-theme
 raml2html --theme raml2html-werk-theme --output output/docs.html --input docs.raml
 ```
 
+**Note**: For some reason installing *raml2html-werk-theme* globally does not work. See [this issue](https://github.com/silicann/raml2html-werk-theme/issues/2) for progress on the situation. You can install both *raml2html* and *raml2html-werk-theme* as a local dependency and use `node_modules/.bin/raml2html --theme raml2html-werk-theme` to work around this problem for the time being.
+
 **Note**: Use of the `--output` flag is required, because the theme bundles assets along with the HTML.
 
 This theme is intended for general use and we would love to see others use it. That being said there are some caveats when using this theme that you should be aware of.
