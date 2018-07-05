@@ -28,7 +28,8 @@
   {%- elif is('string', prop) -%}
     {{ prop }}
   {%- else -%}
-    {{ prop.originalType | default(prop.type, true) }}
+    {%- set _type = prop.originalType | default(prop.type, true) -%}
+    {%- if _type === 'nil' -%}null{%- else -%}{{ _type }}{%- endif -%}
   {%- endif -%}
 {%- endmacro -%}
 
