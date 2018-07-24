@@ -82,6 +82,7 @@
                     {{ render_markdown(response.description) }}
                   {% endif %}
                   {{ body_section(method_id, response.body) }}
+                  {{ property_section('Headers', response.headers) }}
                   {# render annotations #}
                   {{ annotation_section(method.annotations) }}
                   {{ example_section(null, response.examples) }}
