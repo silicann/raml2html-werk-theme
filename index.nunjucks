@@ -12,11 +12,14 @@
 
   <body data-component="scroll-spy">
     <header class="hero">
-      <div class="hero-body">
-        <h1 class="title is-1">{{ title }}</h1>
-        {% if description %}
-          <p class="subtitle has-priority-3">{{ description }}</p>
-        {% endif %}
+      <div class="hero-body is-flex">
+        <div>
+          <h1 class="title is-1">{{ title }}</h1>
+          {% if description %}
+            <p class="subtitle has-priority-3">{{ description }}</p>
+          {% endif %}
+        </div>
+        {% include "./settings.nunjucks" %}
       </div>
     </header>
 

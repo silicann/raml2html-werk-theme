@@ -1,0 +1,17 @@
+<div class="requires-js">
+    <div class="dropdown is-right is-hoverable" data-component="settings">
+    <div class="dropdown-trigger">
+        <button class="button" aria-haspopup="true" aria-controls="settings-menu">
+        <span>Settings</span>
+        </button>
+    </div>
+    <div class="dropdown-menu" id="settings-menu" role="menu">
+        <div class="dropdown-content">
+        <label class="dropdown-item">
+            <input type="checkbox" name="openDetails">
+            Open all Details
+        </label>
+        </div>
+    </div>
+    </div>
+</div>
