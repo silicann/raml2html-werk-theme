@@ -145,7 +145,7 @@
 
 {% macro body_section(base_id, bodies) %}
   {% if isIterable(bodies) %}
-    {% set tabs_id = method_id + '_body' %}
+    {% set tabs_id = base_id + '_body' %}
     <div class="tabbable" data-component="tabbable" data-tabbable-id="{{ tabs_id }}">
       <header class="tabs is-boxed">
         <strong class="title is-6">Body</strong>
