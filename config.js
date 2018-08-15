@@ -37,8 +37,25 @@ function any (check, args) {
   return false
 }
 
+function has (obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key)
+}
+
 function is (type, it) {
   return typeof it === String(type)  // eslint-disable-line
+}
+
+function reverse (array) {
+  return [...array].reverse()
+}
+
+function find (collection, predicate) {
+  if (!collection || !collection.length) return
+  for (const item of collection) {
+    if (predicate(item)) {
+      return item
+    }
+  }
 }
 
 function dump (data) {
@@ -51,6 +68,86 @@ function addUniqueTypeIds (raml) {
     return types
   }, {}))
   return raml
+}
+
+function annotate (obj, annotations) {
+  if (obj && obj.annotations && obj.annotations.length) {
+    return obj.annotations.map(annotation => {
+      const annotationClass = annotations[annotation.key]
+      const displayAs = has(annotationClass, 'facets')
+        ? annotationClass.facets.__display_as.default
+        : 'flag'
+      return [ displayAs, annotationClass, annotation ]
+    })
+  }
+
+  return []
+}
+
+function inheritAnnotations (raml, annotations, parents = []) {
+  if (annotations.length === 0) {
+    // don’t do anything if no annotations have been defined
+    return
+  }
+
+  function addAnnotation (obj, annotation) {
+    if (!annotation) return
+    if (!has(obj, 'annotations')) {
+      obj.annotations = []
+    }
+    obj.annotations.push(annotation)
+  }
+
+  function findAnnotation (name, searchIn = null) {
+    searchIn = searchIn || reverse(parents)
+    for (const item of searchIn) {
+      const annotation = find(item.annotations, a => a.name === name)
+      if (annotation) {
+        return annotation
+      }
+    }
+  }
+
+  function inheritIfNotExists (obj, annotationName, searchIn = null) {
+    if (!findAnnotation(annotationName, [obj])) {
+      addAnnotation(obj, findAnnotation(annotationName, searchIn))
+    }
+  }
+
+  function findAnnotationSubset (applyTo) {
+    return Object.values(annotations)
+      .filter(a => has(a, 'facets'))
+      .filter(a => a.facets.__apply_to.default === applyTo)
+  }
+
+  const methodAnnotations = findAnnotationSubset('Method')
+  const responseAnnotations = findAnnotationSubset('Response')
+
+  raml.resources = raml.resources.map(resource => {
+    if (methodAnnotations.length > 0 && resource.methods && resource.methods.length > 0) {
+      methodAnnotations
+        .forEach(methodAnnotation => {
+          resource.methods
+            .forEach(method => {
+              inheritIfNotExists(method, methodAnnotation.name)
+
+              if (method.responses && method.responses.length > 0) {
+                responseAnnotations.forEach(responseAnnotation => {
+                  method.responses.forEach(response => {
+                    inheritIfNotExists(response, responseAnnotation.name, [...parents, method])
+                  })
+                })
+              }
+            })
+        })
+    }
+
+    if (resource.resources && resource.resources.length) {
+      inheritAnnotations(resource, annotations, [...parents, resource])
+    }
+
+    return resource
+  })
 }
 
 function createMarkdownParser () {
@@ -95,6 +192,7 @@ function createRenderEngine (raml) {
     .addGlobal('dump', dump)
     .addGlobal('raml', raml)
     .addGlobal('markdown', createMarkdownParser())
+    .addGlobal('annotate', obj => annotate(obj, raml['annotationTypes']))
 }
 
 module.exports = {
@@ -106,6 +204,7 @@ module.exports = {
   },
   processRamlObj (ramlObj, config, options) {
     addUniqueTypeIds(ramlObj)
+    inheritAnnotations(ramlObj, ramlObj.annotationTypes)
     ramlObj.config = config
     ramlObj.options = options
 

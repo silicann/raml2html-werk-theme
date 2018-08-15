@@ -396,3 +396,24 @@ label.dropdown-item:hover {
         color: var(--oc-orange-6);
     }
 }
+
+.flag {
+    .group-endpoint-header & {
+        &,
+        .flag-name,
+        .flag-value {
+            color: #aaa;
+            font-size: .75rem;
+        }
+    }
+
+    &.is-string {
+        .flag-name::after {
+            content: ':';
+        }
+    }
+
+    &:not(:first-child)::before {
+        content: ' | '
+    }
+}

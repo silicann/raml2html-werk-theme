@@ -146,7 +146,7 @@
 {% macro body_section(base_id, bodies) %}
   {% if isIterable(bodies) %}
     {% set tabs_id = base_id + '_body' %}
-    <div class="tabbable" data-component="tabbable" data-tabbable-id="{{ tabs_id }}">
+    <div class="tabbable field" data-component="tabbable" data-tabbable-id="{{ tabs_id }}">
       <header class="tabs is-boxed">
         <strong class="title is-6">Body</strong>
         <ul class="tabbable-tabs" data-tabbable-tabs="{{ tabs_id }}">
@@ -286,28 +286,33 @@
 
 
 
-{% macro annotation_section (annotations, h=6, hDisplay=6) %}
-  {% if isIterable(annotations) %}
-    {% for annotation in annotations %}
-        {% if annotation.key in raml.annotationTypes %}
-          {% set annotationType = raml.annotationTypes[annotation.key] %}
-
+{%- macro annotation_section(obj, renderOnly=null, h=6, hDisplay=6) -%}
+  {%- for displayAs, annotationType, annotation in annotate(obj) -%}
+    {% if renderOnly === null or renderOnly === displayAs %}
+      {%- if displayAs === 'flag' -%}
+        <span class="flag is-{{ annotationType.type }}">
+          <strong class="flag-name" title="{{ annotationType.description }}">{{ annotationType.displayName }}</strong>
+          {% if annotationType.type === 'string' %}
+            <span class="flag-value">{{ annotation.structuredValue }}</span>
+          {% endif %}
+        </span>
+      {%- elseif displayAs === 'code-list' -%}
+        <div class="field">
           <h{{ h }} class="title is-{{ hDisplay }}">
             {{ annotationType.displayName | default(annotationType.name) }}
           </h{{ h }}>
 
-          {% if annotationType.type === 'array' and annotationType.items === 'string' %}
-            <div class="content">
-              <ul>
-                {% for item in annotation.structuredValue %}
-                  <li>
-                    <code class="value">{{ item }}</code>
-                  </li>
-                {% endfor %}
-              <ul>
-            </div>
-          {% endif %}
-        {% endif %}
-    {% endfor %}
-  {% endif %}
-{% endmacro %}
+          <div class="content">
+            <ul>
+              {% for item in annotation.structuredValue %}
+                <li>
+                  <code class="value">{{ item }}</code>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {%- endif -%}
+    {% endif %}
+  {%- endfor -%}
+{%- endmacro -%}

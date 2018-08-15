@@ -33,11 +33,12 @@
     {% set method_id = r.uniqueId + '_' + method.method %}
 
     <div id="{{ method_id }}" class="group-endpoint" data-spy data-spy-parent="{{ r.uniqueId }}">
-      <header>
+      <header class="group-endpoint-header">
         <h4 class="title is-4 is-anchored">
           {{ method.displayName | default(uri, True) }} {{ anchor(method_id) }}
           <div class="subtitle is-6">
             {{ method_verb(method) }} <span class="value">{{ uri }}</span>
+            {{ annotation_section(method, renderOnly='flag') }}
           </div>
         </h4>
 
@@ -84,7 +85,7 @@
                   {{ body_section(method_id, response.body) }}
                   {{ property_section('Headers', response.headers) }}
                   {# render annotations #}
-                  {{ annotation_section(method.annotations) }}
+                  {{ annotation_section(response) }}
                   {{ example_section(null, response.examples) }}
                 </div>
               {% endfor %}
