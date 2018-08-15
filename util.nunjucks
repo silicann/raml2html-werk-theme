@@ -20,17 +20,31 @@
 
 
 
-{%- macro type_name(prop) -%}
+{%- macro type_name(prop, link=true) -%}
   {%- if prop.rawType and prop.rawType.name in raml.types -%}
-    {{ type_reference_link(raml.types[prop.rawType.name]) }}
+    {%- if link -%}
+      {{ type_reference_link(raml.types[prop.rawType.name]) }}
+    {%- else -%}
+      {{ type_label(raml.types[prop.rawType.name]) }}
+    {%- endif -%}
   {%- elif prop.items and prop.items.originalType in raml.types -%}
-    {{ type_reference_link(raml.types[prop.originalType]) }}
+    {%- if link -%}
+      {{ type_reference_link(raml.types[prop.originalType]) }}
+    {%- else -%}
+      {{ type_label(raml.types[prop.originalType]) }}
+    {%- endif -%}
   {%- elif is('string', prop) -%}
     {{ prop }}
   {%- elif prop.type === 'union' and isIterable(prop.anyOf) -%}
-    Union of {% for alt in prop.anyOf -%}
+    any of
+    {#
+              the following lines make careful use of white-space control.
+              don’t just add - characters because you think they belong there.
+            #}
+    {% for alt in prop.anyOf -%}
+      {%- if not loop.first and not loop.last %}, {% endif -%}
+      {%- if loop.last %} or {% endif -%}
       {{ type_name(alt) | trim }}
-      {%- if not loop.last %} or {% endif -%}
     {%- endfor -%}
   {%- else -%}
     {%- set _type = prop.originalType | default(prop.type, true) -%}
@@ -40,15 +54,19 @@
 
 
 
+{%- macro type_label(type) -%}
+  {%- if type.displayName and type.displayName != type.name -%}
+    <abbr title="{{ type.displayName }}">{{ type.name }}</abbr>
+  {%- else -%}
+    {{ type.name }}
+  {%- endif -%}
+{%- endmacro -%}
+
+
+
 {%- macro type_reference_link(type) -%}
   <a href="#{{ type.uniqueId }}" title="Jump to '{{ type.displayName | default(type.name, true) }}' type docs"
-     data-component="preview">
-    {%- if type.displayName and type.displayName != type.name -%}
-      <abbr title="{{ type.displayName }}">{{ type.name }}</abbr>
-    {%- else -%}
-      {{ type.name }}
-    {%- endif -%}
-  </a>
+     data-component="preview">{{ type_label(type) }}</a>
   {#- for all non-object base-types show the base-type with a leading space -#}
   {%- if type.type !== 'object' -%}
     {{ ' ' }}({{ type.type }})
@@ -73,10 +91,15 @@
           {%- if prop.type === 'array' and prop.items -%}
             Array of {{ type_name(prop.items) | trim }}
           {%- elif prop.type === 'union' and prop.anyOf.length -%}
-            Union of
+            any of
+            {#
+              the following lines make careful use of white-space control.
+              don’t just add - characters because you think they belong there.
+            #}
             {% for alt in prop.anyOf -%}
+              {%- if not loop.first and not loop.last %}, {% endif -%}
+              {%- if loop.last %} or {% endif -%}
               {{ type_name(alt) | trim }}
-              {%- if not loop.last %} or {% endif -%}
             {%- endfor -%}
           {%- else -%}
             {{ type_name(prop) | trim }}
@@ -145,7 +168,13 @@
             {% else %}
               {% set title = body %}
             {% endif %}
-            {{ property_section(body, body.properties) }}
+
+            {% if body.anyOf %}
+              {{ property_section(body, body.anyOf) }}
+            {% else %}
+              {{ property_section(body, body.properties) }}
+            {% endif %}
+
             {{ example_section(null, body.examples) }}
           </div>
         {% endfor %}
@@ -224,16 +253,10 @@
                 </details>
               {% endif %}
               {% if prop.items and prop.items.type === 'union' %}
-                <div>
-                  {% for type in prop.items.anyOf %}
-                    {% if type.properties %}
-                      <details>
-                        <summary>{{ type_name(type) }}</summary>
-                        {{ property_table(type.properties) }}
-                      </details>
-                    {% endif %}
-                  {% endfor %}
-                </div>
+                {{ union_detail(prop.items, true) }}
+              {% endif %}
+              {% if prop.type === 'union' %}
+                {{ union_detail(prop) }}
               {% endif %}
             </td>
           </tr>
@@ -242,6 +265,25 @@
     </table>
   {% endif %}
 {% endmacro %}
+
+
+
+{% macro union_detail(union, isArray=false) %}
+  <div>
+    {% for type in union.anyOf %}
+      {% if type.properties %}
+        <details>
+          <summary>
+            {{ type_name(type, link=false) }}
+            {%- if isArray -%}[]{%- endif -%}
+          </summary>
+          {{ property_table(type.properties) }}
+        </details>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endmacro %}
+
 
 
 {% macro annotation_section (annotations, h=6, hDisplay=6) %}
