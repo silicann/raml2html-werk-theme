@@ -24,6 +24,19 @@ This theme is intended for general use and we would love to see others use it. T
 
 This theme requires raml2html v7.1.0+.
 
+### Additional Command-Line Options
+
+The following cli options can be used when calling raml2html in order to change the behaviour
+of the theme:
+
+`--no-bundle-assets`: 
+  Prevents the theme from copying the assets next to the html output.
+  
+`--asset-base-path /foo`: 
+  Sets the base path to something different than the default `./assets`
+  (in the case of the example to `/foo`). Useful when used with 
+  `no-bundle-assets` to store assets in a different location.
+
 ### Annotations
 
 There currently is no general purpose rendering implementation for annotations. We’ve implemented what we needed but don’t feel that this scratches the surface of what people may want to use annotations for. If you use annotations and want to see better support in this theme please open up an issue and discuss your use case with us.

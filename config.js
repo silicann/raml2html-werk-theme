@@ -214,20 +214,26 @@ module.exports = {
     )
   },
   writeOutput (result, config, argv) {
+    const bundleAssets = has(argv, 'bundleAssets') ? argv.bundleAssets : true
+
     // check if the user provided the output option
-    if (!argv.output) {
+    if (bundleAssets && !argv.output) {
       throw new Error(
         'this theme requires local assets to work.\n' +
         'please use the --output option or use a different theme'
       )
     }
 
+    result = result.replace(/___ASSET_BASEPATH___/g, argv.assetBasePath || './assets')
+
     return Promise.all([
       fsExtra.writeFile(argv.output, result),
-      fsExtra.copy(
-        path.join(__dirname, 'dist', 'assets'),
-        path.join(path.dirname(argv.output), 'assets')
-      )
+      bundleAssets
+        ? fsExtra.copy(
+          path.join(__dirname, 'dist', 'assets'),
+          path.join(path.dirname(argv.output), 'assets')
+        )
+        : Promise.resolve()
     ])
   }
 }
