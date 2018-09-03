@@ -5,7 +5,7 @@
 
 
 {% macro resource_group(r) %}
-  <div id="{{ r.uniqueId }}" class="group" data-spy data-spy-parent="__all_resources">
+  <div id="{{ r.uniqueId }}" class="group is-new-page" data-spy data-spy-parent="__all_resources">
     <header class="group-header">
       <div class="group-title">
         <h3 class="title is-3">{{ r.displayName | default(r.relativeUri, True) }}</h3>
@@ -32,7 +32,7 @@
     <!-- begin of resource block for {{ method.method | upper }} {{ uri }} -->
     {% set method_id = r.uniqueId + '_' + method.method %}
 
-    <div id="{{ method_id }}" class="group-endpoint" data-spy data-spy-parent="{{ r.uniqueId }}">
+    <div id="{{ method_id }}" class="group-endpoint keep-on-page" data-spy data-spy-parent="{{ r.uniqueId }}">
       <header class="group-endpoint-header">
         <h4 class="title is-4 is-anchored">
           {{ method.displayName | default(uri, True) }} {{ anchor(method_id) }}

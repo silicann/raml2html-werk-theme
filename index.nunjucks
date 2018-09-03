@@ -11,7 +11,7 @@
   </head>
 
   <body data-component="scroll-spy">
-    <header class="hero">
+    <header class="hero is-hidden-print">
       <div class="hero-body is-flex">
         <div>
           <h1 class="title is-1">{{ title }}</h1>
@@ -25,7 +25,7 @@
 
     <div>
       <div class="columns">
-        <div class="column is-nav is-narrow-tablet is-12-mobile" data-component="menu">
+        <div class="column is-nav is-narrow-tablet is-12-mobile is-hidden-print" data-component="menu">
           {% include "./sidebar.nunjucks" %}
         </div>
         <div class="column">
@@ -33,7 +33,7 @@
             {% from './content.nunjucks' import resource_group, type_detail %}
             {% from './util.nunjucks' import property_section, render_markdown %}
 
-            <section id="__all_docs" class="section" data-spy>
+            <section id="__all_docs" class="section is-new-page" data-spy>
               <section id="__basic_information_docs" class="subsection" data-spy data-spy-parent="__all_docs">
                 <h2 class="title is-2">Basic Information</h2>
                 <h3 class="title is-3">Endpoint</h3>
@@ -50,14 +50,14 @@
               {% endfor %}
             </section>
 
-            <section id="__all_resources" class="section" data-spy>
+            <section id="__all_resources" class="section is-new-page" data-spy>
               <h2 class="title is-2">Resources</h2>
               {% for resource in resources %}
                 {{ resource_group(resource) }}
               {% endfor %}
             </section>
 
-            <section id="__all_types" class="section" data-spy>
+            <section id="__all_types" class="section is-new-page" data-spy>
               <h2 class="title is-2">Type Reference</h2>
               {% for typeName, type in types | dictsort %}
                 {{ type_detail(type) }}

@@ -45,8 +45,50 @@ details summary {
     cursor: pointer;
 }
 
+abbr {
+    @media print {
+        text-decoration: none;
+    }
+}
+
+pre, code {
+    page-break-inside: avoid;
+
+    @media print {
+        white-space: pre-wrap;
+    }
+}
+
+h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+}
+
 :root:not(.has-js) .requires-js {
     display: none !important;
+}
+
+.is-hidden-print {
+    @media print {
+        display: none !important;
+    }
+}
+
+.is-new-page {
+    page-break-before: always;
+
+    > h1, > h2, > h3, > h4, > h5, > h6 {
+        &:first-child + .is-new-page {
+            page-break-before: avoid;
+        }
+    }
+}
+
+.keep-on-page {
+    page-break-inside: avoid;
+
+    .group.is-new-page > .group-header:first-child + .group-resource-group-marker + & {
+        page-break-inside: auto;
+    }
 }
 
 label.dropdown-item:hover {
