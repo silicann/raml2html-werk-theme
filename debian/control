@@ -1,0 +1,11 @@
+Source: raml2html-werk-theme
+Section: web
+Priority: optional
+Maintainer: Konrad Mohrfeldt <mohrfeldt@silicann.com>
+Standards-Version: 3.9.6
+
+Package: doc-assets
+Architecture: all
+Description: Bulma and OpenColors based styles, fonts and scripts for use in documentation
+
+

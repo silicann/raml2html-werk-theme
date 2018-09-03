@@ -1,4 +1,7 @@
 .cache
 .idea
 node_modules
+debian
+makefilet-download-ondemand.mk
+Makefile
 npm-debug.log

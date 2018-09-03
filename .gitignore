@@ -3,3 +3,9 @@ dist
 node_modules
 npm-debug.log
 build/
+
+debian/.debhelper
+debian/*.log
+debian/*.substvars
+debian/files
+debian/doc-assets
