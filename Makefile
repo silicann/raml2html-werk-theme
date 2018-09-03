@@ -3,7 +3,14 @@ include makefilet-download-ondemand.mk
 DEPS_ASSETS = $(shell find assets -type f)
 ASSETS = dist/assets
 
-$(ASSETS): package.json $(DEPS_ASSETS)
+.PHONY: build
+build: $(ASSETS)
+
+node_modules: package.json package-lock.json
+	npm ci
+	touch node_modules
+
+$(ASSETS): node_modules package.json $(DEPS_ASSETS)
 	npm run build
 	touch "$(ASSETS)"
 
