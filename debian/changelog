@@ -1,3 +1,9 @@
+raml2html-werk-theme (1.3.0-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Konrad Mohrfeldt <mohrfeldt@silicann.com>  Mon, 03 Sep 2018 23:05:23 +0200
+
 raml2html-werk-theme (1.2.0-1) unstable; urgency=medium
 
   * Initial release.
