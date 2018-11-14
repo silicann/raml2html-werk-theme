@@ -85,7 +85,7 @@ function annotate (obj, annotations) {
 }
 
 function inheritAnnotations (raml, annotations, parents = []) {
-  if (annotations.length === 0) {
+  if (!annotations || annotations.length === 0) {
     // don’t do anything if no annotations have been defined
     return
   }
