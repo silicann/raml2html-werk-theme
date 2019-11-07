@@ -124,7 +124,7 @@ function inheritAnnotations (raml, annotations, parents = []) {
   const responseAnnotations = findAnnotationSubset('Response')
 
   raml.resources = raml.resources.map(resource => {
-    if (methodAnnotations.length > 0 && resource.methods && resource.methods.length > 0) {
+    if (methodAnnotations && methodAnnotations.length > 0 && resource.methods && resource.methods.length > 0) {
       methodAnnotations
         .forEach(methodAnnotation => {
           resource.methods
