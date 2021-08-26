@@ -3,6 +3,11 @@ include makefilet-download-ondemand.mk
 DEPS_ASSETS = $(shell find assets -type f)
 ASSETS = dist/assets
 
+# Make sure the dpkg-buildpackage command does not interfere with npm.
+undefine no_proxy
+undefine http_proxy
+undefine https_proxy
+
 .PHONY: build
 build: $(ASSETS)
 
