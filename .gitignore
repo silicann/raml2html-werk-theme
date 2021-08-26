@@ -9,3 +9,8 @@ debian/*.log
 debian/*.substvars
 debian/files
 debian/doc-assets
+
+.idea/
+.env*
+.*.swp
+.*.swo
