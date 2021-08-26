@@ -1,0 +1,7 @@
+include:
+  - project: 'urwerk/gitlab-recipes'
+    ref: main
+    file: '/templates/deb.gitlab-ci.yml'
+
+variables:
+  DEBBUILD_DEFAULT: docker.gitlab.silicann.systems:443/urwerk/docker-recipes/debbuild-webdev:buster
