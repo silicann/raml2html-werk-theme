@@ -54,7 +54,7 @@
     "node": ">=8"
   },
   "dependencies": {
-    "fs-extra": "^7.0.0",
+    "fs-extra": "^8.0.0",
     "html-minifier": "^3.5.20",
     "markdown-it": "^8.4.2",
     "markdown-it-deflist": "^2.0.3",
